@@ -34,6 +34,12 @@
         .first-td {
             width: 10%
         }
+
+        .time-line-cell {
+            display: table-cell;
+            line-height: 8px;
+            text-indent: -9999px;
+        }
     </style>
 </head>
 
@@ -52,7 +58,7 @@
     </div>
 </div>
 <%--<div class="col-md-2">--%>
-    <%--<jsp:include page="navigation.jsp"/>--%>
+<%--<jsp:include page="navigation.jsp"/>--%>
 <%--</div>--%>
 <div class="table-responsive">
     <ul class="list-group">
@@ -76,6 +82,11 @@
         </li>
     </ul>
 </div>
+<div style="width: 100%; display: table;">
+    <span class="time-line-cell" ng-repeat="config in timeLineCellConfigs" style="width: {{config.width}}; background-color:{{config.bgcolor}};">JavaScript</span>
+    <span class="time-line-cell" style="width: 70%; background-color:#b07219;">Java</span>
+    <%--<span class="time-line-cell" style="width: 40%; background-color:#563d7c;">CSS</span>--%>
+</div>
 </body>
 
 </html>
@@ -90,6 +101,7 @@
     MY_ANGULAR_CONFIG(app);
     app.controller("eventsCtrl", function ($scope, $http) {
         $scope.eventsList = [];
+        $scope.timeLineCellConfigs = [{"width" : "30%", "bgcolor" : "#f1e05a"}, {"width" : "70%", "bgcolor" : "#b07219"}];
         $scope.startDate = null;
         $scope.endDate = null;
         $http.get("events").success(function (res) {
