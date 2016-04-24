@@ -17,7 +17,7 @@ import static org.testng.Assert.*;
 public class MyLifeEventRepositoryTest {
 
     @Test
-    void testGetMyLifeEvent() {
+    public void testGetMyLifeEvent() {
 
         RestTemplate restTemplate = new RestTemplate();
         MyLifeEventEntity entity = restTemplate.getForObject("http://localhost:8081/my-life/events/1", MyLifeEventEntity.class);
@@ -25,12 +25,12 @@ public class MyLifeEventRepositoryTest {
     }
 
     @Test
-    void testPostMyLifeEvent() {
+    public void testPostMyLifeEvent() {
 
         RestTemplate restTemplate = new RestTemplate();
         MyLifeEventEntity myLifeEventEntity = new MyLifeEventEntity();
         long myId = 1L;
-        String eventDescription = "坐地铁，看《把时间当做朋友》，受到启发，准备做一个生活轨迹记录系统";
+        String eventDescription = "test";
         Date eventStartTime = new Date(2016, 04, 22, 7, 15, 10);
         Date eventEndTime = new Date(2016, 04, 22, 8, 10, 10);
         myLifeEventEntity.setEventDescription(eventDescription);

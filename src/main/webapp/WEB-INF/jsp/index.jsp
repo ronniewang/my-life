@@ -8,18 +8,15 @@
     <title>时间都去哪了</title>
     <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <script src="//cdn.bootcss.com/angular.js/1.4.3/angular.min.js"></script>
+    <script src="//cdn.bootcss.com/angular-resource/1.5.0/angular-resource.min.js"></script>
     <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap.min.js"></script>
     <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap-tpls.min.js"></script>
     <link href="//cdn.bootcss.com/bootstrap-datepicker/1.4.0/css/bootstrap-datepicker3.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<%= request.getServletContext().getContextPath()%>/css/style.css"/>
     <script src="<%= request.getServletContext().getContextPath()%>/js/bootstrap-datepicker.js"></script>
     <style>
-        .chosen {
-            background-color: gold;
-        }
-
         body {
             padding-top: 70px;
             margin: 0 auto;
@@ -44,22 +41,58 @@
 </head>
 
 <body ng-app="eventsApp" class="container-fluid" ng-controller="eventsCtrl">
-<div class="navbar navbar-default navbar-fixed-top">
-    <div class="form-inline form-center">
-        <div class="form-group">
-            <input type="text" class="form-control" ng-model="query" placeholder="Search">
-            <button type="button" class="btn btn-primary" ng-click="selectAll()">Select All</button>
-            <label for="startDate">Start Date</label>
-            <input class="datepicker" type="text" data-date-format="mm/dd/yyyy" readonly="true" id="startDate">
-            <label for="endDate">End Date</label>
-            <input class="datepicker" type="text" data-date-format="mm/dd/yyyy" readonly="true" id="endDate">
-            <button type="button" class="btn btn-success" ng-click="refresh()" id="refreshBtn">Refresh</button>
-        </div>
-    </div>
-</div>
+<%--<div class="navbar navbar-default navbar-fixed-top">--%>
+<%--<div class="form-inline form-center">--%>
+<%--<div class="form-group">--%>
+<%--<input type="text" class="form-control" ng-model="query" placeholder="Search">--%>
+<%--<button type="button" class="btn btn-primary" ng-click="selectAll()">Select All</button>--%>
+<%--<button type="button" class="btn btn-success" ng-click="refresh()" id="refreshBtn">Refresh</button>--%>
+<%--</div>--%>
+<%--</div>--%>
+<%--</div>--%>
 <%--<div class="col-md-2">--%>
 <%--<jsp:include page="navigation.jsp"/>--%>
 <%--</div>--%>
+<div class="table-responsive">
+    <form class="form-inline">
+        <label for="startDate">Start Date</label>
+        <input class="datepicker" type="text" data-date-format="mm/dd/yyyy" readonly="true" id="startDate">
+
+        <div class="form-group">
+            <label>结束时间: </label>
+            <select class="form-control" ng-model="hour" ng-options="h for h in hours">
+                <option value="">请选择小时</option>
+            </select>
+            <label>时</label>
+        </div>
+        <div class="form-group">
+            <select class="form-control" ng-model="minute" ng-options="min for min in minutes">
+                <option value="">请选择分钟</option>
+            </select>
+            <label>分</label>
+        </div>
+        <div class="form-group">
+            <label>事情类型: </label>
+            <select class="form-control" ng-model="currentParentType" ng-change="updateChildren()"
+                    ng-options="item.typeDescription for item in eventTypes | filter:filterParentType track by item.typeId">
+            </select>
+        </div>
+        <%--<div class="form-group">--%>
+        <%--<label>子类型</label>--%>
+        <%--<select class="form-control" ng-model="currentParentType" ng-options="item.typeDescription for item in eventChildTypes track by item.typeId">--%>
+        <%--</select>--%>
+        <%--</div>--%>
+        <button type="submit" class="btn btn-default" ng-click="submit()">Submit</button>
+    </form>
+    <div class="form-group">
+        <label>描述</label>
+        <textarea class="form-control" rows="3" ng-model="desc" type="textarea"></textarea>
+    </div>
+</div>
+<div style="width: 100%; display: table;">
+    <span class="time-line-cell" ng-repeat="config in timeLineCellConfigs"
+          style="width: {{config.width}}; background-color:{{config.bgcolor}};">JavaScript</span>
+</div>
 <div class="table-responsive">
     <ul class="list-group">
         <li class="list-group-item" ng-repeat="event in eventsList | filter:filterMatchCode | orderBy:eventStartTime">
@@ -82,11 +115,6 @@
         </li>
     </ul>
 </div>
-<div style="width: 100%; display: table;">
-    <span class="time-line-cell" ng-repeat="config in timeLineCellConfigs" style="width: {{config.width}}; background-color:{{config.bgcolor}};">JavaScript</span>
-    <span class="time-line-cell" style="width: 70%; background-color:#b07219;">Java</span>
-    <%--<span class="time-line-cell" style="width: 40%; background-color:#563d7c;">CSS</span>--%>
-</div>
 </body>
 
 </html>
@@ -97,33 +125,104 @@
             autoclose: true
         });
     });
-    var app = angular.module("eventsApp", []);
+    var app = angular.module("eventsApp", ['ngResource']);
     MY_ANGULAR_CONFIG(app);
-    app.controller("eventsCtrl", function ($scope, $http) {
+    app.controller("eventsCtrl", function ($scope, $http, $resource) {
+        $scope.currentParentType;
         $scope.eventsList = [];
-        $scope.timeLineCellConfigs = [{"width" : "30%", "bgcolor" : "#f1e05a"}, {"width" : "70%", "bgcolor" : "#b07219"}];
+        $scope.eventTypes = [];
+        $scope.eventChildTypes = [];
+        $scope.hour;
+        $scope.hours = [];
+        for (var i = 0; i < 24; i++) {
+            $scope.hours.push(i);
+        };
+        $scope.minute;
+        $scope.minutes = [];
+        for (var i = 0; i < 60; i++) {
+            $scope.minutes.push(i);
+        };
+        $scope.timeLineCellConfigs = [{
+            "width": "30%",
+            "bgcolor": "#f1e05a"
+        }, {
+            "width": "40%",
+            "bgcolor": "#b07219"
+        }, {
+            "width": "30%",
+            "bgcolor": "#f1e05a"
+        }];
         $scope.startDate = null;
         $scope.endDate = null;
-        $http.get("events").success(function (res) {
+        $http.get("events/?s=eventStartTime,desc").success(function (res) {
             $scope.eventsList = res._embedded.events;
         });
-        $scope.filterMatchCode = function (element) {
-            if ($.trim($scope.query) == '') {
+        $http.get("eventTypes").success(function (res) {
+            $scope.eventTypes = res._embedded.eventTypes;
+            $scope.currentParentType = $scope.eventTypes[0];
+            $scope.updateChildren();
+        });
+        $scope.saveUser = function(){
+            var User = $resource('events');
+            User.save({
+                "eventStartTime": new Date(),
+                "eventEndTime": new Date,
+                "eventDescription": "test",
+                "eventResources": null,
+                "eventType": 0
+            });
+        }
+        $scope.filterParentType = function (element) {
+            if (element.parentTypeId == 0) {
                 return true;
             }
-            return element.matchCode.indexOf($scope.query) != -1 ? true : false;
-        }
-        $scope.chooseOdds = function (event) {
-            if (event.choose) {
-                event.choose = false;
-            } else {
-                event.choose = true;
-            }
-        }
-        $scope.selectAll = function () {
-            $.each($scope.eventsList, function (i, value) {
-                value.choose = true;
+            return false;
+        };
+        $scope.updateChildren = function () {
+            $scope.eventChildTypes = [];
+            angular.forEach($scope.eventTypes, function (value, key) {
+                if (value.parentTypeId == $scope.currentParentType.typeId) {
+                    $scope.eventChildTypes.push(value);
+                    alert(value)
+                }
             });
+        };
+        $scope.desc;
+        $scope.submit = function () {
+            if(!$scope.desc){
+                alert("desc null");
+            } else {
+                alert($scope.desc);
+            }
+            var date = new Date();
+            var dateStr = date.getFullYear() + "/" + $scope.paddingZero(date.getMonth() + 1) + "/" + $scope.paddingZero(date.getDate()) + " " + $scope.paddingZero($scope.hour) + ":" + $scope.paddingZero($scope.minute)+":00";
+            var event = {
+                "eventStartTime": date,
+                "eventEndTime": date,
+                "eventDescription": "test",
+                "eventResources": null,
+                "eventType": 0
+            };
+            var req = {
+                method: 'POST',
+                url: 'events',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                },
+                data: event
+            };
+            $http(req).then(function(res){
+                alert("success");
+            },function(res){
+                alert("error");
+            })
+//            $scope.saveUser();
+        };
+        $scope.paddingZero = function (i) {
+            if (i < 10) {
+                return "0" + i;
+            }
+            return i;
         }
         $scope.validate = function (start, end) {
             if (start == "") {

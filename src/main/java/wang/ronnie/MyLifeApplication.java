@@ -7,6 +7,7 @@ import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import wang.ronnie.config.PersistenceConfig;
+import wang.ronnie.config.RestConfiguration;
 import wang.ronnie.config.WebSocketConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -32,7 +33,7 @@ import java.util.Properties;
  * @author ronnie
  */
 @SpringBootApplication
-@Import(value = {PersistenceConfig.class, WebSocketConfig.class})
+@Import(value = {PersistenceConfig.class, WebSocketConfig.class, RestConfiguration.class})
 @EnableSolrRepositories("wang.ronnie.solr.repository")
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class MyLifeApplication extends SpringBootServletInitializer {
@@ -88,9 +89,11 @@ public class MyLifeApplication extends SpringBootServletInitializer {
 
     @Bean
     public EmbeddedServletContainerFactory servletContainer() {
+
         TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory() {
             @Override
             protected void postProcessContext(Context context) {
+
                 SecurityConstraint securityConstraint = new SecurityConstraint();
                 securityConstraint.setUserConstraint("CONFIDENTIAL");
                 SecurityCollection collection = new SecurityCollection();
@@ -105,6 +108,7 @@ public class MyLifeApplication extends SpringBootServletInitializer {
     }
 
     private Connector initiateHttpConnector() {
+
         Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
         connector.setScheme("http");
         connector.setPort(8081);

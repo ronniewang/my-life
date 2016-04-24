@@ -606,8 +606,8 @@
 			var offset = this.component ? this.component.parent().offset() : this.element.offset();
 			var height = this.component ? this.component.outerHeight(true) : this.element.outerHeight(false);
 			var width = this.component ? this.component.outerWidth(true) : this.element.outerWidth(false);
-			//var left = offset.left - appendOffset.left + 250,
-			var left = offset.left - appendOffset.left,
+			var left = offset.left - appendOffset.left + 100,
+			//var left = offset.left - appendOffset.left,
 				top = offset.top - appendOffset.top;
 
 			this.picker.removeClass(
