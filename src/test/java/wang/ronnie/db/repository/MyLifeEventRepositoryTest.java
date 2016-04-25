@@ -15,7 +15,6 @@ import static org.testng.Assert.*;
  * @author ronnie
  */
 public class MyLifeEventRepositoryTest {
-
     @Test
     public void testGetMyLifeEvent() {
 
