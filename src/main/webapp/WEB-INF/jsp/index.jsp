@@ -201,7 +201,7 @@
                 "eventEndTime": $scope.eventList[0].eventEndTime.substr(0, 8) + day + " " + $scope.paddingZero($scope.hour) + ":" + $scope.paddingZero($scope.minute) + ":00",
                 "eventDescription": $scope.desc,
                 "eventResources": $scope.eventResource,
-                "eventType": $scope.currentParentType
+                "eventType": $scope.currentParentType.typeId
             };
             $http.post("add", {
                 "entity": JSON.stringify(event)
