@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50711
 File Encoding         : 65001
 
-Date: 2016-04-25 15:47:05
+Date: 2016-04-25 17:59:26
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -71,6 +71,8 @@ INSERT INTO `t_event_type` VALUES ('1', '工作', '0', '');
 INSERT INTO `t_event_type` VALUES ('2', '娱乐', '0', '');
 INSERT INTO `t_event_type` VALUES ('3', '交通', '0', '');
 INSERT INTO `t_event_type` VALUES ('4', '睡觉', '0', '');
+INSERT INTO `t_event_type` VALUES ('5', '学习', '0', '');
+INSERT INTO `t_event_type` VALUES ('6', '家务事', '0', '');
 INSERT INTO `t_event_type` VALUES ('31', '步行', '3', '\0');
 INSERT INTO `t_event_type` VALUES ('32', '公交', '3', '\0');
 INSERT INTO `t_event_type` VALUES ('33', '出租车', '3', '\0');
@@ -98,7 +100,7 @@ CREATE TABLE `t_my_life_event` (
   `created_time` datetime NOT NULL,
   `last_modified_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_my_life_event
@@ -130,7 +132,9 @@ INSERT INTO `t_my_life_event` VALUES ('30', '2016-04-23 19:31:28', '2016-04-24 0
 INSERT INTO `t_my_life_event` VALUES ('31', '2016-04-24 00:07:25', '2016-04-24 07:32:08', '睡觉', null, '0', '26683', null, '1', '1', '2016-04-24 08:49:31', '2016-04-25 14:39:53');
 INSERT INTO `t_my_life_event` VALUES ('32', '2016-04-24 07:32:08', '2016-04-24 08:29:47', '晨练，洗漱，煮鸡蛋', null, '0', '3459', null, '1', '1', '2016-04-24 08:50:12', '2016-04-25 14:38:41');
 INSERT INTO `t_my_life_event` VALUES ('33', '2016-04-24 08:29:47', '2016-04-24 08:52:57', '补前两天没输入数据库的数据记录', null, '0', '1390', null, '1', '1', '2016-04-24 08:53:25', '2016-04-25 14:38:41');
-INSERT INTO `t_my_life_event` VALUES ('34', '2016-04-24 08:52:57', '2016-04-24 10:38:18', '继续完成my-life项目', null, '0', '6321', null, '1', '1', '2016-04-25 08:38:51', '2016-04-25 14:38:41');
+INSERT INTO `t_my_life_event` VALUES ('34', '2016-04-24 08:52:57', '2016-04-24 10:38:00', '继续完成my-life项目', null, '0', '6321', null, '1', '1', '2016-04-25 08:38:51', '2016-04-25 14:38:41');
+INSERT INTO `t_my_life_event` VALUES ('39', '2016-04-24 10:38:00', '2016-04-24 11:37:00', '去物美买东西', null, '0', '89940', null, '1', '1', '2016-04-25 17:17:04', '2016-04-25 17:17:04');
+INSERT INTO `t_my_life_event` VALUES ('42', '2016-04-24 11:37:00', '2016-04-24 04:02:00', '发送', null, '0', '-27300', null, '1', '1', '2016-04-25 17:53:10', '2016-04-25 17:53:10');
 
 -- ----------------------------
 -- Table structure for t_user
