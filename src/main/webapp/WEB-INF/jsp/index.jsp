@@ -88,6 +88,10 @@
         <label>描述</label>
         <textarea class="form-control" rows="3" ng-model="desc" type="textarea"></textarea>
     </div>
+    <div class="form-group">
+        <label>相关资源</label>
+        <textarea class="form-control" rows="1" ng-model="eventResource" type="textarea"></textarea>
+    </div>
 </div>
 <div style="width: 100%; display: table;">
     <span class="time-line-cell" ng-repeat="config in timeLineCellConfigs"
@@ -95,7 +99,7 @@
 </div>
 <div class="table-responsive">
     <ul class="list-group">
-        <li class="list-group-item" ng-repeat="event in eventsList | filter:filterMatchCode | orderBy:eventStartTime">
+        <li class="list-group-item" ng-repeat="event in eventList | filter:filterMatchCode | orderBy:eventStartTime">
             <table class="table table-hover text-left">
                 <thead>
                 <tr>
@@ -129,19 +133,21 @@
     MY_ANGULAR_CONFIG(app);
     app.controller("eventsCtrl", function ($scope, $http, $resource) {
         $scope.currentParentType;
-        $scope.eventsList = [];
+        $scope.eventList = [];
         $scope.eventTypes = [];
         $scope.eventChildTypes = [];
         $scope.hour;
         $scope.hours = [];
         for (var i = 0; i < 24; i++) {
             $scope.hours.push(i);
-        };
+        }
+        ;
         $scope.minute;
         $scope.minutes = [];
         for (var i = 0; i < 60; i++) {
             $scope.minutes.push(i);
-        };
+        }
+        ;
         $scope.timeLineCellConfigs = [{
             "width": "30%",
             "bgcolor": "#f1e05a"
@@ -155,19 +161,19 @@
         $scope.startDate = null;
         $scope.endDate = null;
         $http.get("events/?s=eventStartTime,desc").success(function (res) {
-            $scope.eventsList = res._embedded.events;
+            $scope.eventList = res._embedded.events;
         });
         $http.get("eventTypes").success(function (res) {
             $scope.eventTypes = res._embedded.eventTypes;
             $scope.currentParentType = $scope.eventTypes[0];
             $scope.updateChildren();
         });
-        $scope.saveUser = function(){
+        $scope.saveUser = function () {
             var User = $resource('events');
             User.save({
-                "eventStartTime": new Date(),
+                "eventStartTime": $scope.eventList[0].eventStartTime,
                 "eventEndTime": new Date,
-                "eventDescription": "test",
+                "eventDescription": 'test',
                 "eventResources": null,
                 "eventType": 0
             });
@@ -188,32 +194,35 @@
             });
         };
         $scope.desc;
+        $scope.eventResource;
         $scope.submit = function () {
-            if(!$scope.desc){
+            if (!$scope.desc) {
                 alert("desc null");
             } else {
-                alert($scope.desc);
+//                alert($scope.desc);
             }
             var date = new Date();
-            var dateStr = date.getFullYear() + "/" + $scope.paddingZero(date.getMonth() + 1) + "/" + $scope.paddingZero(date.getDate()) + " " + $scope.paddingZero($scope.hour) + ":" + $scope.paddingZero($scope.minute)+":00";
+            var dateStr = date.getFullYear() + "-" + $scope.paddingZero(date.getMonth() + 1) + "-" + $scope.paddingZero(date.getDate()) + " " + $scope.paddingZero($scope.hour) + ":" + $scope.paddingZero($scope.minute) + ":00";
             var event = {
-                "eventStartTime": date,
-                "eventEndTime": date,
-                "eventDescription": "test",
-                "eventResources": null,
+                "eventStartTime": $scope.eventList[0].eventEndTime + ":00",
+                "eventEndTime": dateStr,
+                "eventDescription": $scope.desc,
+                "eventResources": $scope.eventResource,
                 "eventType": 0
             };
-            var req = {
-                method: 'POST',
-                url: 'events',
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8'
-                },
-                data: event
-            };
-            $http(req).then(function(res){
+//            var req = {
+//                method: 'POST',
+//                url: 'add',
+//                headers: {
+//                    'Content-Type': 'application/json; charset=utf-8'
+//                },
+//                data: {"entity":event}
+//            };
+            $http.post("add", {
+                "entity": JSON.stringify(event)
+            }).then(function (res) {
                 alert("success");
-            },function(res){
+            }, function (res) {
                 alert("error");
             })
 //            $scope.saveUser();

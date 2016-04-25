@@ -1,14 +1,18 @@
 package wang.ronnie.controller;
 
-import wang.ronnie.solr.Todo;
-import wang.ronnie.solr.repository.TodoRepository;
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import wang.ronnie.db.entity.MyLifeEventEntity;
+import wang.ronnie.db.repository.MyLifeEventRepository;
+import wang.ronnie.global.JsonResult;
+import wang.ronnie.service.MyLifeEventService;
 
 import javax.servlet.http.HttpSession;
 
@@ -18,39 +22,31 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class HomeController {
 
-//    @Autowired
-//    private TodoRepository todoRepository;
-//
-//    @RequestMapping("/")
-//    public String home() {
-//
-//        todoRepository.save(new Todo("1", "desc", "title"));
-//        return "index";
-//    }
+    @Autowired
+    private MyLifeEventService myLifeEventService;
+
+    @Autowired
+    private MyLifeEventRepository myLifeEventRepository;
 
     @RequestMapping("/index")
     public String index() {
 
         return "index";
     }
+
     @RequestMapping("/timeLine")
     public String timeLine() {
 
         return "time_line";
     }
 
-    @RequestMapping(value = "/testPerformance", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "add", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
     @ResponseBody
-    public String testPerformance(HttpSession httpSession) {
+    public JsonResult add(@RequestParam String entity) {
 
-        Integer times = (Integer) httpSession.getAttribute("times");
-        if (times == null) {
-            httpSession.setAttribute("times", 0);
-        } else {
-            System.out.println("times is " + times);
-            httpSession.setAttribute("times", ++times);
-        }
-        return "{\"value\":true}";
+        MyLifeEventEntity lifeEventEntity = JSON.parseObject(entity, MyLifeEventEntity.class);
+        myLifeEventService.add(lifeEventEntity);
+        return JsonResult.SUCCESS;
     }
 
     @RequestMapping("/login")

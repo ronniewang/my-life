@@ -29,7 +29,6 @@ public class EventTypeEntity {
         this.typeId = typeId;
     }
 
-    @Basic
     @Column(name = "type_description", nullable = false, length = 255)
     public String getTypeDescription() {
 
@@ -41,7 +40,6 @@ public class EventTypeEntity {
         this.typeDescription = typeDescription;
     }
 
-    @Basic
     @Column(name = "parent_type_id", nullable = true)
     public Integer getParentTypeId() {
 
@@ -53,7 +51,6 @@ public class EventTypeEntity {
         this.parentTypeId = parentTypeId;
     }
 
-    @Basic
     @Column(name = "has_children", nullable = false)
     public boolean isHasChildren() {
 

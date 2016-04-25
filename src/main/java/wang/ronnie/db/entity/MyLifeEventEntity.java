@@ -11,6 +11,8 @@ import java.util.Date;
 
 /**
  * Created by ronnie on 2016/4/22.
+ *
+ * @author ronnie
  */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -27,7 +29,12 @@ public class MyLifeEventEntity {
 
     private String eventResources;
 
-    private int eventType;
+    private Integer eventType;
+
+    /**
+     * 以秒为单位
+     */
+    private Integer eventDuration;
 
     private Long createdBy;
 
@@ -36,6 +43,23 @@ public class MyLifeEventEntity {
     private Date createdTime;
 
     private Date lastModifiedTime;
+
+    @PreUpdate
+    public void preUpdate() {
+
+        eventDuration = calculateEventDuration();
+    }
+
+    @PrePersist
+    public void prePersist() {
+
+        eventDuration = calculateEventDuration();
+    }
+
+    public int calculateEventDuration() {
+
+        return (int) (((eventEndTime.getTime() - eventStartTime.getTime()) / 1000));
+    }
 
     @Id
     @GeneratedValue
@@ -50,7 +74,6 @@ public class MyLifeEventEntity {
         this.id = id;
     }
 
-    @Basic
     @Column(name = "event_start_time", nullable = false)
     public Date getEventStartTime() {
 
@@ -62,7 +85,6 @@ public class MyLifeEventEntity {
         this.eventStartTime = eventStartTime;
     }
 
-    @Basic
     @Column(name = "event_end_time", nullable = false)
     public Date getEventEndTime() {
 
@@ -74,7 +96,6 @@ public class MyLifeEventEntity {
         this.eventEndTime = eventEndTime;
     }
 
-    @Basic
     @Column(name = "event_description", nullable = false, columnDefinition = "longtext")
     public String getEventDescription() {
 
@@ -86,7 +107,6 @@ public class MyLifeEventEntity {
         this.eventDescription = eventDescription;
     }
 
-    @Basic
     @Column(name = "event_resources", columnDefinition = "longtext")
     public String getEventResources() {
 
@@ -98,21 +118,30 @@ public class MyLifeEventEntity {
         this.eventResources = eventResources;
     }
 
-    @Basic
     @Column(name = "event_type", nullable = false)
-    public int getEventType() {
+    public Integer getEventType() {
 
         return eventType;
     }
 
-    public void setEventType(int eventType) {
+    public void setEventType(Integer eventType) {
 
         this.eventType = eventType;
     }
 
-    @Basic
+    @Column(name = "event_duration")
+    public Integer getEventDuration() {
+
+        return eventDuration;
+    }
+
+    public void setEventDuration(Integer eventDuration) {
+
+        this.eventDuration = eventDuration;
+    }
+
     @CreatedBy
-    @Column(name = "created_by", nullable = false)
+    @Column(name = "created_by")
     public Long getCreatedBy() {
 
         return createdBy;
@@ -123,9 +152,8 @@ public class MyLifeEventEntity {
         this.createdBy = createdBy;
     }
 
-    @Basic
     @LastModifiedBy
-    @Column(name = "last_modified_by", nullable = false)
+    @Column(name = "last_modified_by")
     public Long getLastModifiedBy() {
 
         return lastModifiedBy;
@@ -136,9 +164,8 @@ public class MyLifeEventEntity {
         this.lastModifiedBy = lastModifiedBy;
     }
 
-    @Basic
     @CreatedDate
-    @Column(name = "created_time", nullable = false)
+    @Column(name = "created_time")
     public Date getCreatedTime() {
 
         return createdTime;
@@ -149,9 +176,8 @@ public class MyLifeEventEntity {
         this.createdTime = createdTime;
     }
 
-    @Basic
     @LastModifiedDate
-    @Column(name = "last_modified_time", nullable = false)
+    @Column(name = "last_modified_time")
     public Date getLastModifiedTime() {
 
         return lastModifiedTime;

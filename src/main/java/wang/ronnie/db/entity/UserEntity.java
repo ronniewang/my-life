@@ -45,7 +45,6 @@ public class UserEntity {
         this.id = id;
     }
 
-    @Basic
     @Column(name = "email", nullable = true, length = 255)
     public String getEmail() {
 
@@ -57,7 +56,6 @@ public class UserEntity {
         this.email = email;
     }
 
-    @Basic
     @Column(name = "mobile_phone", nullable = true, length = 255)
     public String getMobilePhone() {
 
@@ -69,7 +67,6 @@ public class UserEntity {
         this.mobilePhone = mobilePhone;
     }
 
-    @Basic
     @Column(name = "password", nullable = false, length = 255)
     public String getPassword() {
 
@@ -81,7 +78,6 @@ public class UserEntity {
         this.password = password;
     }
 
-    @Basic
     @Column(name = "username", nullable = false, length = 255)
     public String getUsername() {
 
@@ -93,7 +89,6 @@ public class UserEntity {
         this.username = username;
     }
 
-    @Basic
     @Column(name = "is_email_valid", nullable = true)
     public Boolean getEmailValid() {
 
@@ -105,7 +100,6 @@ public class UserEntity {
         isEmailValid = emailValid;
     }
 
-    @Basic
     @Column(name = "is_mobile_phone_valid", nullable = true)
     public Boolean getMobilePhoneValid() {
 
@@ -117,7 +111,6 @@ public class UserEntity {
         isMobilePhoneValid = mobilePhoneValid;
     }
 
-    @Basic
     @CreatedDate
     @Column(name = "created_time", nullable = false)
     public Date getCreatedTime() {
@@ -130,7 +123,6 @@ public class UserEntity {
         this.createdTime = createdTime;
     }
 
-    @Basic
     @LastModifiedDate
     @Column(name = "last_modified_time", nullable = false)
     public Date getLastModifiedTime() {

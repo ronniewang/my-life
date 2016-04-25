@@ -1,13 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <html>
 <head></head>
 <body>
-<script src="/spider-web/js/jquery.min.js-2.2.1.js"></script>
+<script src="<%= request.getServletContext().getContextPath()%>/js/jquery.min.js-2.2.1.js"></script>
 <script>
     $('.message a').click(function () {
         $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
     });
 </script>
-<link href="/spider-web/css/login.css" rel="stylesheet">
+<link href="<%= request.getServletContext().getContextPath()%>/css/login.css" rel="stylesheet">
 <div class="login-page">
     <div class="form">
         <form class="register-form">
