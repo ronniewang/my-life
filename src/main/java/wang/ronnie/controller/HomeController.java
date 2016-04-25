@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import wang.ronnie.db.entity.MyLifeEventEntity;
-import wang.ronnie.db.repository.MyLifeEventRepository;
 import wang.ronnie.global.JsonResult;
+import wang.ronnie.service.EventTagService;
 import wang.ronnie.service.MyLifeEventService;
 
 import javax.servlet.http.HttpSession;
@@ -26,7 +26,7 @@ public class HomeController {
     private MyLifeEventService myLifeEventService;
 
     @Autowired
-    private MyLifeEventRepository myLifeEventRepository;
+    private EventTagService eventTagService;
 
     @RequestMapping("/index")
     public String index() {
