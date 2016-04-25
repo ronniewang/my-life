@@ -45,7 +45,11 @@ public class HomeController {
     public JsonResult add(@RequestParam String entity) {
 
         MyLifeEventEntity lifeEventEntity = JSON.parseObject(entity, MyLifeEventEntity.class);
-        myLifeEventService.add(lifeEventEntity);
+        try {
+            myLifeEventService.add(lifeEventEntity);
+        } catch (IllegalArgumentException e) {
+            return new JsonResult(e.getMessage());
+        }
         return JsonResult.SUCCESS;
     }
 

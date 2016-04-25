@@ -7,8 +7,14 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.junit.Test;
 import org.mockito.stubbing.Answer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import wang.ronnie.db.entity.MyLifeEventEntity;
 import wang.ronnie.db.repository.MyLifeEventRepository;
+
+import java.util.Arrays;
+import java.util.Date;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -28,9 +34,22 @@ public class MyLifeEventServiceImplTest {
     private MyLifeEventRepository myLifeEventRepository;
 
     @Test
-    public void testAdd_addNewEvent_shouldCallMyLifeEventRepositoryOnce() {
+    public void testAdd_addNewEvent_shouldCallMyLifeEventRepositoryFindAndSave() {
 
+        final Date now = new Date();
         MyLifeEventEntity entity = new MyLifeEventEntity();
+        entity.setEventEndTime(now);
+        when(myLifeEventRepository.findAll(isA(PageRequest.class))).thenAnswer(new Answer<Page<MyLifeEventEntity>>() {
+
+            @Override
+            public Page<MyLifeEventEntity> answer(InvocationOnMock invocationOnMock) throws Throwable {
+
+                MyLifeEventEntity query = new MyLifeEventEntity();
+                long beforeNow = now.getTime() - 10000L;
+                query.setEventEndTime(new Date(beforeNow));
+                return new PageImpl<>(Arrays.asList(query));
+            }
+        });
         when(myLifeEventRepository.save(isA(MyLifeEventEntity.class))).thenAnswer(new Answer<MyLifeEventEntity>() {
 
             @Override
@@ -41,7 +60,28 @@ public class MyLifeEventServiceImplTest {
         });
         myLifeEventService.add(entity);
         verify(myLifeEventRepository).save(isA(MyLifeEventEntity.class));
+        verify(myLifeEventRepository).findAll(isA(PageRequest.class));
         verifyNoMoreInteractions(myLifeEventRepository);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testAdd_addIllegalEvent_shouldThrowIllegalArgumentException() {
+
+        final Date now = new Date();
+        MyLifeEventEntity entity = new MyLifeEventEntity();
+        entity.setEventEndTime(now);
+        when(myLifeEventRepository.findAll(isA(PageRequest.class))).thenAnswer(new Answer<Page<MyLifeEventEntity>>() {
+
+            @Override
+            public Page<MyLifeEventEntity> answer(InvocationOnMock invocationOnMock) throws Throwable {
+
+                MyLifeEventEntity query = new MyLifeEventEntity();
+                Date afterNow = new Date(now.getTime() + 10000L);
+                query.setEventEndTime(afterNow);
+                return new PageImpl<>(Arrays.asList(query));
+            }
+        });
+        myLifeEventService.add(entity);
     }
 
     @Test(expected = NullPointerException.class)

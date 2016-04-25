@@ -1,9 +1,10 @@
-package wang.ronnie.db.repository;
+package wang.ronnie.db.repository.support;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 import wang.ronnie.db.entity.UserEntity;
+import wang.ronnie.db.repository.UserRepository;
 
 @Component
 class SpringSecurityAuditorAware implements AuditorAware<Long> {

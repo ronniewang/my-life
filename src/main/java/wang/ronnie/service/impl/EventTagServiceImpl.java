@@ -1,5 +1,6 @@
 package wang.ronnie.service.impl;
 
+import org.springframework.stereotype.Service;
 import wang.ronnie.service.EventTagService;
 
 /**
@@ -7,6 +8,7 @@ import wang.ronnie.service.EventTagService;
  *
  * @author ronnie
  */
+@Service
 public class EventTagServiceImpl implements EventTagService {
 
 }

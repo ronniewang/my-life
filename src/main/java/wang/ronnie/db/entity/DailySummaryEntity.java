@@ -16,14 +16,12 @@ import java.util.Date;
  */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "t_event_tag")
-public class TEventTagEntity {
+@Table(name = "t_daily_summary")
+public class DailySummaryEntity {
 
     private Long id;
 
-    private Long userId;
-
-    private String tag;
+    private String summary;
 
     private Date createdTime;
 
@@ -34,8 +32,7 @@ public class TEventTagEntity {
     private Long lastModifiedBy;
 
     @Id
-    @GeneratedValue
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     public Long getId() {
 
         return id;
@@ -46,26 +43,15 @@ public class TEventTagEntity {
         this.id = id;
     }
 
-    @Column(name = "user_id", nullable = false)
-    public Long getUserId() {
+    @Column(name = "summary", nullable = false, columnDefinition = "longtext")
+    public String getSummary() {
 
-        return userId;
+        return summary;
     }
 
-    public void setUserId(Long userId) {
+    public void setSummary(String summary) {
 
-        this.userId = userId;
-    }
-
-    @Column(name = "tag", nullable = false)
-    public String getTag() {
-
-        return tag;
-    }
-
-    public void setTag(String tag) {
-
-        this.tag = tag;
+        this.summary = summary;
     }
 
     @CreatedDate
@@ -122,11 +108,10 @@ public class TEventTagEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TEventTagEntity that = (TEventTagEntity) o;
+        DailySummaryEntity that = (DailySummaryEntity) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
-        if (tag != null ? !tag.equals(that.tag) : that.tag != null) return false;
+        if (summary != null ? !summary.equals(that.summary) : that.summary != null) return false;
         if (createdTime != null ? !createdTime.equals(that.createdTime) : that.createdTime != null) return false;
         if (lastModifiedTime != null ? !lastModifiedTime.equals(that.lastModifiedTime) : that.lastModifiedTime != null)
             return false;
@@ -141,8 +126,7 @@ public class TEventTagEntity {
     public int hashCode() {
 
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
-        result = 31 * result + (tag != null ? tag.hashCode() : 0);
+        result = 31 * result + (summary != null ? summary.hashCode() : 0);
         result = 31 * result + (createdTime != null ? createdTime.hashCode() : 0);
         result = 31 * result + (lastModifiedTime != null ? lastModifiedTime.hashCode() : 0);
         result = 31 * result + (createdBy != null ? createdBy.hashCode() : 0);

@@ -7,11 +7,23 @@ public class JsonResult {
 
     public static final JsonResult SUCCESS = new JsonResult(null, 0, "");
 
+    private static final int DEFAULT_ERROR_CODE = 1;
+
     public JsonResult(Object object, int errorCode, String errorMessage) {
 
         this.object = object;
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
+    }
+
+    public JsonResult(Object object, String errorMessage) {
+
+        this(object, DEFAULT_ERROR_CODE, errorMessage);
+    }
+
+    public JsonResult(String errorMessage) {
+
+        this(null, DEFAULT_ERROR_CODE, errorMessage);
     }
 
     public JsonResult() {

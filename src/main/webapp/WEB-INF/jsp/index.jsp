@@ -201,11 +201,9 @@
             } else {
 //                alert($scope.desc);
             }
-            var date = new Date();
-            var dateStr = date.getFullYear() + "-" + $scope.paddingZero(date.getMonth() + 1) + "-" + $scope.paddingZero(date.getDate()) + " " + $scope.paddingZero($scope.hour) + ":" + $scope.paddingZero($scope.minute) + ":00";
             var event = {
                 "eventStartTime": $scope.eventList[0].eventEndTime + ":00",
-                "eventEndTime": dateStr,
+                "eventEndTime": $scope.eventList[0].eventEndTime.substr(0, 10) + " " + $scope.paddingZero($scope.hour) + ":" + $scope.paddingZero($scope.minute) + ":00",
                 "eventDescription": $scope.desc,
                 "eventResources": $scope.eventResource,
                 "eventType": 0
@@ -220,9 +218,13 @@
 //            };
             $http.post("add", {
                 "entity": JSON.stringify(event)
-            }).then(function (res) {
-                alert("success");
-            }, function (res) {
+            }).success(function (res) {
+                if (res.errorCode != 0) {
+                    alert("添加失败" + res.errorMessage);
+                } else {
+                    alert("success");
+                }
+            }).error(function (res) {
                 alert("error");
             })
 //            $scope.saveUser();
