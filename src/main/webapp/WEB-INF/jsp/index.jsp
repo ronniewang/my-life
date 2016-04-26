@@ -68,15 +68,10 @@
             </div>
             <div class="form-group">
                 <label>这件事情是 </label>
-                <select class="form-control" ng-model="currentParentType" ng-change="updateChildren()"
+                <select class="form-control" ng-model="currentParentType"
                         ng-options="item.typeDescription for item in eventTypes | filter:filterParentType track by item.typeId">
                 </select> 类型的
             </div>
-            <%--<div class="form-group">--%>
-            <%--<label>子类型</label>--%>
-            <%--<select class="form-control" ng-model="currentParentType" ng-options="item.typeDescription for item in eventChildTypes track by item.typeId">--%>
-            <%--</select>--%>
-            <%--</div>--%>
         </form>
     </div>
     <div class="form-group">
@@ -92,8 +87,8 @@
     </div>
 </div>
 <div style="width: 100%; display: table;">
-    <span class="time-line-cell" ng-repeat="config in timeLineCellConfigs"
-          style="width: {{config.width}}; background-color:{{config.bgcolor}};">JavaScript</span>
+    <span class="time-line-cell" ng-repeat="config in timeLineCellConfigs" ng-click="clickTimeLine($index)"
+          style="width: {{config.width}}; background-color:{{config.bgcolor}};">nothing</span>
 </div>
 <div class="table-responsive">
     <ul class="list-group">
@@ -147,28 +142,35 @@
         for (var i = 0; i < 60; i++) {
             $scope.minutes.push(i);
         }
-        $scope.timeLineCellConfigs = [{
-            "width": "30%",
-            "bgcolor": "#f1e05a"
-        }, {
-            "width": "40%",
-            "bgcolor": "#b07219"
-        }, {
-            "width": "30%",
-            "bgcolor": "#f1e05a"
-        }];
+        $scope.timeLineCellConfigs = [];
         $scope.startDate = null;
         $scope.endDate = null;
         $scope.load = function () {
             $http.get("events/?s=eventStartTime,desc").success(function (res) {
                 $scope.eventList = res._embedded.events;
+                var sum = 0;
+                var flag = 0;
+                $scope.timeLineCellConfigs = [];
+                angular.forEach($scope.eventList, function (value, key) {
+                    sum = sum + value.eventDuration;
+                });
+                angular.forEach($scope.eventList, function (value, key) {
+                    var config = {};
+                    if ((flag % 2) == 0) {
+                        config.bgcolor = "#f1e05a";
+                    } else {
+                        config.bgcolor = "#b07219";
+                    }
+                    config.width = (value.eventDuration / sum) * 100 + "%";
+                    $scope.timeLineCellConfigs.push(config);
+                    flag = flag + 1;
+                });
             });
         };
         $scope.load();
         $http.get("eventTypes").success(function (res) {
             $scope.eventTypes = res._embedded.eventTypes;
             $scope.currentParentType = $scope.eventTypes[0];
-            $scope.updateChildren();
         });
         $scope.filterParentType = function (element) {
             if (element.parentTypeId == 0) {
@@ -176,14 +178,8 @@
             }
             return false;
         };
-        $scope.updateChildren = function () {
-            $scope.eventChildTypes = [];
-            angular.forEach($scope.eventTypes, function (value, key) {
-                if (value.parentTypeId == $scope.currentParentType.typeId) {
-                    $scope.eventChildTypes.push(value);
-//                    alert(value)
-                }
-            });
+        $scope.clickTimeLine = function(index){
+            alert($scope.eventList[index].eventDescription);
         };
         $scope.desc;
         $scope.eventResource;
