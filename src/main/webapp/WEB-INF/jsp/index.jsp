@@ -41,8 +41,8 @@
 
 <body ng-app="eventsApp" class="container-fluid" ng-controller="eventsCtrl">
 <div class="table-responsive">
-    <div class="form-group">
-        <form class="form-inline">
+    <form class="form-group" name="newEvent">
+        <div class="form-inline">
             <%--<label for="startDate">Start Date</label>--%>
             <%--<input class="datepicker" type="text" data-date-format="mm/dd/yyyy" readonly="true" id="startDate">--%>
             <div class="form-group">
@@ -71,19 +71,20 @@
                         ng-options="item.typeDescription for item in eventTypes | filter:filterParentType track by item.typeId">
                 </select> 类型的
             </div>
-        </form>
-    </div>
-    <div class="form-group">
-        <label>做一个简要的描述吧</label>
-        <textarea class="form-control" rows="3" ng-model="desc" type="textarea"></textarea>
-    </div>
-    <div class="form-group">
-        <label>有没有什么相关资源呢</label>
-        <textarea class="form-control" rows="1" ng-model="eventResource" type="textarea"></textarea>
-    </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-default" ng-click="submit()">我要添加事件</button>
-    </div>
+        </div>
+        <div class="form-group">
+            <label>做一个简要的描述吧</label>
+            <textarea class="form-control" rows="3" ng-model="desc" type="textarea" required></textarea>
+        </div>
+        <div class="form-group">
+            <label>有没有什么相关资源呢</label>
+            <textarea class="form-control" rows="1" ng-model="eventResource" type="textarea"></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-default" ng-click="submit()" ng-disabled="!newEvent.$valid">我要添加事件
+            </button>
+        </div>
+    </form>
 </div>
 <div style="width: 100%; display: table;">
     <span class="time-line-cell" ng-repeat="config in timeLineCellConfigs" ng-click="clickTimeLine($index)"
@@ -144,9 +145,9 @@
         $scope.timeLineCellConfigs = [];
         $scope.startDate = null;
         $scope.endDate = null;
-        $scope.getTypeColor = function(type){
-            for (var i = 0; i < $scope.eventTypes.length; i++){
-                if($scope.eventTypes[i].typeId == type){
+        $scope.getTypeColor = function (type) {
+            for (var i = 0; i < $scope.eventTypes.length; i++) {
+                if ($scope.eventTypes[i].typeId == type) {
                     return $scope.eventTypes[i].color;
                 }
             }
@@ -220,12 +221,6 @@
             }
             return i;
         }
-        app.directive('ronnieValidator', function factory(injectables){
-            var directiveDefinition = {
-
-            };
-            return directiveDefinition;
-        })
         $scope.validate = function (start, end) {
             if (start == "") {
                 alert("start date can not be null");
@@ -250,4 +245,13 @@
             return true;
         }
     });
+    app.directive('ronnieValidator', function () {
+        return {
+            link: function postLink(scope, iElement, iAttrs) {
+                iElement.bind('click', function () {
+                    alert("hh")
+                })
+            }
+        };
+    })
 </script>
