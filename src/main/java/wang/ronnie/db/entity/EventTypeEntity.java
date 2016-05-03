@@ -17,6 +17,8 @@ public class EventTypeEntity {
 
     private boolean hasChildren;
 
+    private String color;
+
     @Id
     @Column(name = "type_id", nullable = false)
     public int getTypeId() {
@@ -62,6 +64,17 @@ public class EventTypeEntity {
         this.hasChildren = hasChildren;
     }
 
+    @Column(name = "color")
+    public String getColor() {
+
+        return color;
+    }
+
+    public void setColor(String color) {
+
+        this.color = color;
+    }
+
     @Override
     public boolean equals(Object o) {
 
@@ -75,8 +88,8 @@ public class EventTypeEntity {
         if (typeDescription != null ? !typeDescription.equals(that.typeDescription) : that.typeDescription != null)
             return false;
         if (parentTypeId != null ? !parentTypeId.equals(that.parentTypeId) : that.parentTypeId != null) return false;
+        return color != null ? color.equals(that.color) : that.color == null;
 
-        return true;
     }
 
     @Override
@@ -86,6 +99,7 @@ public class EventTypeEntity {
         result = 31 * result + (typeDescription != null ? typeDescription.hashCode() : 0);
         result = 31 * result + (parentTypeId != null ? parentTypeId.hashCode() : 0);
         result = 31 * result + (hasChildren ? 1 : 0);
+        result = 31 * result + (color != null ? color.hashCode() : 0);
         return result;
     }
 }

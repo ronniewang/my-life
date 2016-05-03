@@ -220,7 +220,6 @@
                     <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>

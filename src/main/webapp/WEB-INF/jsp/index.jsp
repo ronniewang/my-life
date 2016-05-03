@@ -14,7 +14,6 @@
     <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap.min.js"></script>
     <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap-tpls.min.js"></script>
     <link href="//cdn.bootcss.com/bootstrap-datepicker/1.4.0/css/bootstrap-datepicker3.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<%= request.getServletContext().getContextPath()%>/css/style.css"/>
     <script src="<%= request.getServletContext().getContextPath()%>/js/bootstrap-datepicker.js"></script>
     <style>
         body {
@@ -145,40 +144,43 @@
         $scope.timeLineCellConfigs = [];
         $scope.startDate = null;
         $scope.endDate = null;
+        $scope.getTypeColor = function(type){
+            for (var i = 0; i < $scope.eventTypes.length; i++){
+                if($scope.eventTypes[i].typeId == type){
+                    return $scope.eventTypes[i].color;
+                }
+            }
+        }
         $scope.load = function () {
-            $http.get("events/?s=eventStartTime,desc").success(function (res) {
-                $scope.eventList = res._embedded.events;
-                var sum = 0;
-                var flag = 0;
-                $scope.timeLineCellConfigs = [];
-                angular.forEach($scope.eventList, function (value, key) {
-                    sum = sum + value.eventDuration;
-                });
-                angular.forEach($scope.eventList, function (value, key) {
-                    var config = {};
-                    if ((flag % 2) == 0) {
-                        config.bgcolor = "#f1e05a";
-                    } else {
-                        config.bgcolor = "#b07219";
-                    }
-                    config.width = (value.eventDuration / sum) * 100 + "%";
-                    $scope.timeLineCellConfigs.push(config);
-                    flag = flag + 1;
+            $http.get("eventTypes").success(function (res) {
+                $scope.eventTypes = res._embedded.eventTypes;
+                $scope.currentParentType = $scope.eventTypes[0];
+                $http.get("events/?s=eventStartTime,desc").success(function (res) {
+                    $scope.eventList = res._embedded.events;
+                    var sum = 0;
+                    var flag = 0;
+                    $scope.timeLineCellConfigs = [];
+                    angular.forEach($scope.eventList, function (value, key) {
+                        sum = sum + value.eventDuration;
+                    });
+                    angular.forEach($scope.eventList, function (value, key) {
+                        var config = {};
+                        config.bgcolor = $scope.getTypeColor(value.eventType);
+                        config.width = (value.eventDuration / sum) * 100 + "%";
+                        $scope.timeLineCellConfigs.push(config);
+                        flag = flag + 1;
+                    });
                 });
             });
         };
         $scope.load();
-        $http.get("eventTypes").success(function (res) {
-            $scope.eventTypes = res._embedded.eventTypes;
-            $scope.currentParentType = $scope.eventTypes[0];
-        });
         $scope.filterParentType = function (element) {
             if (element.parentTypeId == 0) {
                 return true;
             }
             return false;
         };
-        $scope.clickTimeLine = function(index){
+        $scope.clickTimeLine = function (index) {
             alert($scope.eventList[index].eventDescription);
         };
         $scope.desc;
@@ -218,6 +220,12 @@
             }
             return i;
         }
+        app.directive('ronnieValidator', function factory(injectables){
+            var directiveDefinition = {
+
+            };
+            return directiveDefinition;
+        })
         $scope.validate = function (start, end) {
             if (start == "") {
                 alert("start date can not be null");

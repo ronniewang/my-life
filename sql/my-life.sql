@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50711
 File Encoding         : 65001
 
-Date: 2016-04-26 09:17:04
+Date: 2016-05-03 16:42:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -61,28 +61,22 @@ CREATE TABLE `t_event_type` (
   `type_description` varchar(255) NOT NULL,
   `parent_type_id` int(11) DEFAULT NULL,
   `has_children` bit(1) NOT NULL,
+  `color` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`type_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_event_type
 -- ----------------------------
-INSERT INTO `t_event_type` VALUES ('1', '工作', '0', '');
-INSERT INTO `t_event_type` VALUES ('2', '娱乐', '0', '');
-INSERT INTO `t_event_type` VALUES ('3', '交通', '0', '');
-INSERT INTO `t_event_type` VALUES ('4', '睡觉', '0', '');
-INSERT INTO `t_event_type` VALUES ('5', '学习', '0', '');
-INSERT INTO `t_event_type` VALUES ('6', '家务事', '0', '');
-INSERT INTO `t_event_type` VALUES ('8', '日常生活', '0', '');
-INSERT INTO `t_event_type` VALUES ('9', '运动', '0', '');
-INSERT INTO `t_event_type` VALUES ('31', '步行', '3', '\0');
-INSERT INTO `t_event_type` VALUES ('32', '公交', '3', '\0');
-INSERT INTO `t_event_type` VALUES ('33', '出租车', '3', '\0');
-INSERT INTO `t_event_type` VALUES ('34', '地铁', '3', '\0');
-INSERT INTO `t_event_type` VALUES ('35', '飞机', '3', '\0');
-INSERT INTO `t_event_type` VALUES ('36', '船', '3', '\0');
-INSERT INTO `t_event_type` VALUES ('37', '私家车', '3', '\0');
-INSERT INTO `t_event_type` VALUES ('38', '其他', '3', '\0');
+INSERT INTO `t_event_type` VALUES ('1', '工作', '0', '', '#EEB422');
+INSERT INTO `t_event_type` VALUES ('2', '娱乐', '0', '', '#FF83FA');
+INSERT INTO `t_event_type` VALUES ('3', '交通', '0', '', '	#8B5A00');
+INSERT INTO `t_event_type` VALUES ('4', '睡觉', '0', '', '#000000');
+INSERT INTO `t_event_type` VALUES ('5', '学习', '0', '', '#1C86EE');
+INSERT INTO `t_event_type` VALUES ('6', '生活琐事', '0', '', '#AAAAAA');
+INSERT INTO `t_event_type` VALUES ('7', '社交', '0', '', '#0000FF');
+INSERT INTO `t_event_type` VALUES ('8', '吃饭', '0', '', '#FFFF00');
+INSERT INTO `t_event_type` VALUES ('9', '运动', '0', '', '#B3EE3A');
 
 -- ----------------------------
 -- Table structure for t_my_life_event
@@ -140,7 +134,7 @@ INSERT INTO `t_my_life_event` VALUES ('43', '2016-04-24 11:37:00', '2016-04-24 1
 INSERT INTO `t_my_life_event` VALUES ('44', '2016-04-24 13:16:00', '2016-04-24 17:55:00', '看欢乐颂，刷鞋，写了点代码，没啥状态', null, '8', '16740', null, '1', '1', '2016-04-25 21:09:40', '2016-04-25 21:09:40');
 INSERT INTO `t_my_life_event` VALUES ('45', '2016-04-24 17:55:00', '2016-04-24 20:14:00', '做饭，香椿豆腐，茄丁炒肉，看欢乐颂', null, '8', '8340', null, '1', '1', '2016-04-25 21:10:06', '2016-04-25 21:10:06');
 INSERT INTO `t_my_life_event` VALUES ('46', '2016-04-24 20:14:00', '2016-04-24 22:15:00', '部落战争', null, '2', '7260', null, '1', '1', '2016-04-25 21:10:42', '2016-04-25 21:10:42');
-INSERT INTO `t_my_life_event` VALUES ('47', '2016-04-24 22:15:00', '2016-04-25 06:33:00', '睡觉', null, '0', '29880', null, '1', '1', '2016-04-25 21:23:09', '2016-04-25 21:23:09');
+INSERT INTO `t_my_life_event` VALUES ('47', '2016-04-24 22:15:00', '2016-04-25 06:33:00', '睡觉', null, '4', '29880', null, '1', '1', '2016-04-25 21:23:09', '2016-04-25 21:23:09');
 INSERT INTO `t_my_life_event` VALUES ('48', '2016-04-25 06:33:00', '2016-04-25 07:10:00', '起床，洗漱，热牛奶', null, '8', '2220', null, '1', '1', '2016-04-25 21:28:29', '2016-04-25 21:28:29');
 INSERT INTO `t_my_life_event` VALUES ('49', '2016-04-25 07:10:00', '2016-04-25 08:13:00', '做地铁去上班，看《把时间当做朋友》', null, '3', '3780', null, '1', '1', '2016-04-25 21:29:19', '2016-04-25 21:29:19');
 INSERT INTO `t_my_life_event` VALUES ('50', '2016-04-25 08:13:00', '2016-04-25 08:37:00', '711买早餐，吃的包子豆浆', null, '8', '1440', null, '1', '1', '2016-04-25 21:30:45', '2016-04-25 21:30:45');
