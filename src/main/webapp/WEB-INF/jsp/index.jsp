@@ -66,6 +66,11 @@
                 <label>分</label> 搞定了这件事情 ^_^
             </div>
             <div class="form-group">
+                <button type="button" class="btn btn-default" ng-click="correctTime()">
+                    重新校准时间
+                </button>
+            </div>
+            <div class="form-group">
                 <label>这件事情是 </label>
                 <select class="form-control" ng-model="currentParentType"
                         ng-options="item.typeDescription for item in eventTypes | filter:filterParentType track by item.typeId">
@@ -73,7 +78,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label>做一个简要的描述吧</label>
+            <label>在下面做一个简要的描述吧</label>
             <textarea class="form-control" rows="3" ng-model="desc" type="textarea" required></textarea>
         </div>
         <div class="form-group">
@@ -81,7 +86,7 @@
             <textarea class="form-control" rows="1" ng-model="eventResource" type="textarea"></textarea>
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-default" ng-click="submit()" ng-disabled="!newEvent.$valid">我要添加事件
+            <button type="submit" class="btn btn-default" ng-click="submit()" ng-disabled="!newEvent.$valid">都填完了，我要添加事件
             </button>
         </div>
     </form>
@@ -132,12 +137,12 @@
         $scope.eventTypes = [];
         $scope.eventChildTypes = [];
         $scope.isTomorrow = false;
-        $scope.hour;
+        $scope.hour = new Date().getHours();
         $scope.hours = [];
         for (var i = 0; i < 24; i++) {
             $scope.hours.push(i);
         }
-        $scope.minute;
+        $scope.minute = new Date().getMinutes();
         $scope.minutes = [];
         for (var i = 0; i < 60; i++) {
             $scope.minutes.push(i);
@@ -184,6 +189,10 @@
         $scope.clickTimeLine = function (index) {
             alert($scope.eventList[index].eventDescription);
         };
+        $scope.correctTime = function(){
+            $scope.hour = new Date().getHours();
+            $scope.minute = new Date().getMinutes();
+        }
         $scope.desc;
         $scope.eventResource;
         $scope.submit = function () {
