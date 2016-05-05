@@ -7,14 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>时间都去哪了</title>
     <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-    <script src="//cdn.bootcss.com/angular.js/1.4.3/angular.min.js"></script>
-    <script src="//cdn.bootcss.com/angular-resource/1.5.0/angular-resource.min.js"></script>
-    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-    <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap.min.js"></script>
-    <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap-tpls.min.js"></script>
     <link href="//cdn.bootcss.com/bootstrap-datepicker/1.4.0/css/bootstrap-datepicker3.min.css" rel="stylesheet">
-    <script src="<%= request.getServletContext().getContextPath()%>/js/bootstrap-datepicker.js"></script>
     <style>
         body {
             padding-top: 70px;
@@ -122,6 +115,15 @@
 </body>
 
 </html>
+<script src="//cdn.bootcss.com/angular.js/1.4.3/angular.min.js"></script>
+<script src="//cdn.bootcss.com/angular-resource/1.5.0/angular-resource.min.js"></script>
+<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap.min.js"></script>
+<script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap-tpls.min.js"></script>
+<script src="//cdn.bootcss.com/sockjs-client/1.0.3/sockjs.min.js"></script>
+<script src="//cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="<%= request.getServletContext().getContextPath()%>/js/bootstrap-datepicker.js"></script>
 <script src="<%= request.getServletContext().getContextPath()%>/js/my-angular-config.js"></script>
 <script>
     $(function () {
