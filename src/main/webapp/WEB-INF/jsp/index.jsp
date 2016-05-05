@@ -8,28 +8,7 @@
     <title>时间都去哪了</title>
     <link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="//cdn.bootcss.com/bootstrap-datepicker/1.4.0/css/bootstrap-datepicker3.min.css" rel="stylesheet">
-    <style>
-        body {
-            padding-top: 70px;
-            margin: 0 auto;
-            width: 80%;
-        }
-
-        .form-center {
-            text-align: center;
-            padding-top: 10px;
-        }
-
-        .first-td {
-            width: 10%
-        }
-
-        .time-line-cell {
-            display: table-cell;
-            line-height: 8px;
-            text-indent: -9999px;
-        }
-    </style>
+    <link href="<%=request.getServletContext().getContextPath()%>/css/custom.css" rel="stylesheet">
 </head>
 
 <body ng-app="eventsApp" class="container-fluid" ng-controller="eventsCtrl">
@@ -66,7 +45,7 @@
             <div class="form-group">
                 <label>这件事情是 </label>
                 <select class="form-control" ng-model="currentParentType"
-                        ng-options="item.typeDescription for item in eventTypes | filter:filterParentType track by item.typeId">
+                        ng-options="eventType.typeDescription for eventType in eventTypes | filter:filterParentType track by eventType.typeId">
                 </select> 类型的
             </div>
         </div>
@@ -85,7 +64,7 @@
     </form>
 </div>
 <div style="width: 100%; display: table;">
-    <span class="time-line-cell" ng-repeat="config in timeLineCellConfigs" ng-click="clickTimeLine($index)"
+    <span class="time-line-cell" ng-repeat="config in timeLineCellConfigs" ng-click="showTimeLine($index)"
           style="width: {{config.width}}; background-color:{{config.bgcolor}};">nothing</span>
 </div>
 <div class="table-responsive">
@@ -117,38 +96,29 @@
 </html>
 <script src="//cdn.bootcss.com/angular.js/1.4.3/angular.min.js"></script>
 <script src="//cdn.bootcss.com/angular-resource/1.5.0/angular-resource.min.js"></script>
-<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
-<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="<%= request.getServletContext().getContextPath()%>/js/jquery.min.js-2.2.1.js"></script>
 <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap.min.js"></script>
 <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap-tpls.min.js"></script>
-<script src="//cdn.bootcss.com/sockjs-client/1.0.3/sockjs.min.js"></script>
-<script src="//cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="<%= request.getServletContext().getContextPath()%>/js/sockjs-0.3.4.js"></script>
+<script src="<%= request.getServletContext().getContextPath()%>/js/stomp.js"></script>
 <script src="<%= request.getServletContext().getContextPath()%>/js/bootstrap-datepicker.js"></script>
-<script src="<%= request.getServletContext().getContextPath()%>/js/my-angular-config.js"></script>
+<script src="<%= request.getServletContext().getContextPath()%>/js/app.js"></script>
 <script>
     $(function () {
         $('.datepicker').datepicker({
             autoclose: true
         });
     });
-    var app = angular.module("eventsApp", ['ngResource']);
-    MY_ANGULAR_CONFIG(app);
-    app.controller("eventsCtrl", function ($scope, $http, $resource) {
+    app.controller("eventsCtrl", function ($scope, $http, $resource, utils) {
         $scope.currentParentType;
         $scope.eventList = [];
         $scope.eventTypes = [];
         $scope.eventChildTypes = [];
         $scope.isTomorrow = false;
-        $scope.hour = new Date().getHours();
-        $scope.hours = [];
-        for (var i = 0; i < 24; i++) {
-            $scope.hours.push(i);
-        }
-        $scope.minute = new Date().getMinutes();
-        $scope.minutes = [];
-        for (var i = 0; i < 60; i++) {
-            $scope.minutes.push(i);
-        }
+        $scope.hour = utils.currentHours();
+        $scope.hours = utils.hours();
+        $scope.minute = utils.currentMinutes();
+        $scope.minutes = utils.minutes();
         $scope.timeLineCellConfigs = [];
         $scope.startDate = null;
         $scope.endDate = null;
@@ -188,13 +158,13 @@
             }
             return false;
         };
-        $scope.clickTimeLine = function (index) {
+        $scope.showTimeLine = function (index) {
             alert($scope.eventList[index].eventDescription);
         };
-        $scope.correctTime = function(){
-            $scope.hour = new Date().getHours();
-            $scope.minute = new Date().getMinutes();
-        }
+        $scope.correctTime = function () {
+            $scope.hour = utils.currentHours();
+            $scope.minute = utils.currentMinutes();
+        };
         $scope.desc;
         $scope.eventResource;
         $scope.submit = function () {
@@ -208,7 +178,7 @@
             }
             var event = {
                 "eventStartTime": $scope.eventList[0].eventEndTime + ":00",
-                "eventEndTime": $scope.eventList[0].eventEndTime.substr(0, 8) + day + " " + $scope.paddingZero($scope.hour) + ":" + $scope.paddingZero($scope.minute) + ":00",
+                "eventEndTime": $scope.eventList[0].eventEndTime.substr(0, 8) + day + " " + utils.paddingZero($scope.hour) + ":" + utils.paddingZero($scope.minute) + ":00",
                 "eventDescription": $scope.desc,
                 "eventResources": $scope.eventResource,
                 "eventType": $scope.currentParentType.typeId
@@ -226,12 +196,6 @@
                 alert("error");
             });
         };
-        $scope.paddingZero = function (i) {
-            if (i < 10) {
-                return "0" + i;
-            }
-            return i;
-        }
         $scope.validate = function (start, end) {
             if (start == "") {
                 alert("start date can not be null");
