@@ -18,53 +18,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
-import org.springframework.data.solr.core.SolrTemplate;
-import org.springframework.data.solr.repository.config.EnableSolrRepositories;
-import org.springframework.data.solr.server.support.HttpSolrServerFactoryBean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
-//import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
  * @author ronnie
  */
 @SpringBootApplication
 @Import(value = {PersistenceConfig.class, WebSocketConfig.class, RestConfiguration.class})
-@EnableSolrRepositories("wang.ronnie.solr.repository")
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class MyLifeApplication extends SpringBootServletInitializer {
 
     @Autowired
     private Environment environment;
-
-//    @Bean
-//    public EmbeddedSolrServerFactoryBean solrServerFactoryBean() {
-//        EmbeddedSolrServerFactoryBean factory = new EmbeddedSolrServerFactoryBean();
-//
-//        factory.setSolrHome(environment.getRequiredProperty("solr.solr.home"));
-//
-//        return factory;
-//    }
-
-    @Bean
-    public HttpSolrServerFactoryBean solrServerFactoryBean() {
-
-        HttpSolrServerFactoryBean factory = new HttpSolrServerFactoryBean();
-
-        factory.setUrl(environment.getRequiredProperty("solr.server.url"));
-
-        return factory;
-    }
-
-    @Bean
-    public SolrTemplate solrTemplate() throws Exception {
-
-        return new SolrTemplate(solrServerFactoryBean().getObject());
-    }
 
     @Bean
     public static JavaMailSender javaMailSender() {
