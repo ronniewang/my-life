@@ -9,16 +9,21 @@ public class JsonResult {
 
     private static final int DEFAULT_ERROR_CODE = 1;
 
-    public JsonResult(Object object, int errorCode, String errorMessage) {
+    public static JsonResult success(Object object) {
 
-        this.object = object;
+        return new JsonResult(object,0,"");
+    }
+
+    public JsonResult(Object result, int errorCode, String errorMessage) {
+
+        this.result = result;
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
     }
 
-    public JsonResult(Object object, String errorMessage) {
+    public JsonResult(Object result, String errorMessage) {
 
-        this(object, DEFAULT_ERROR_CODE, errorMessage);
+        this(result, DEFAULT_ERROR_CODE, errorMessage);
     }
 
     public JsonResult(String errorMessage) {
@@ -30,20 +35,20 @@ public class JsonResult {
 
     }
 
-    private Object object;
+    private Object result;
 
     private int errorCode;
 
     private String errorMessage;
 
-    public Object getObject() {
+    public Object getResult() {
 
-        return object;
+        return result;
     }
 
-    public void setObject(Object object) {
+    public void setResult(Object result) {
 
-        this.object = object;
+        this.result = result;
     }
 
     public int getErrorCode() {
