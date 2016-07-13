@@ -1,5 +1,6 @@
 package wang.ronnie.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -33,6 +34,7 @@ public class UserEntity {
 
     private Date lastModifiedTime;
 
+    @JsonIgnore
     @Id
     @Column(name = "id", nullable = false)
     public long getId() {
@@ -67,6 +69,7 @@ public class UserEntity {
         this.mobilePhone = mobilePhone;
     }
 
+    @JsonIgnore
     @Column(name = "password", nullable = false, length = 255)
     public String getPassword() {
 

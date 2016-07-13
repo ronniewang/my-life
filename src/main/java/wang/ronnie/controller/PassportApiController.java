@@ -1,17 +1,17 @@
 package wang.ronnie.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.codec.digest.Md5Crypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import wang.ronnie.db.entity.UserEntity;
+import wang.ronnie.exception.SystemException;
+import wang.ronnie.global.ErrorCode;
 import wang.ronnie.global.JsonResult;
-import wang.ronnie.global.TokenHolder;
-import wang.ronnie.model.Token;
-import wang.ronnie.passport.service.UserService;
 import wang.ronnie.service.PassportService;
+
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Created by ronniewang on 16/7/12.
@@ -21,29 +21,32 @@ import wang.ronnie.service.PassportService;
 public class PassportApiController {
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private PassportService passportService;
 
     @RequestMapping("/login")
     @ResponseBody
-    public JsonResult login(String username, String password) {
+    public JsonResult login(String loginName, String password) {
 
-        // TODO: 16/7/12 param validate
-        String token = Md5Crypt.md5Crypt((username + password + (System.currentTimeMillis() + "")).getBytes());
-        UserEntity user = passportService.login(username, password);
-        TokenHolder.put(user.getId(), new Token(token, System.currentTimeMillis()));
-        JSONObject result = new JSONObject();
-        result.put("token", token);
-        return JsonResult.success(token);
+        if (isEmpty(loginName) || isEmpty(password)) {
+            throw new SystemException(ErrorCode.Global.PARAM_ERROR);
+        }
+
+        JSONObject result = passportService.login(loginName, password);
+        return JsonResult.success(result);
     }
 
     @RequestMapping("/register")
     @ResponseBody
     public JsonResult register(UserEntity user) {
 
-        // TODO: 16/7/12 param validate
+        if (isEmpty(user.getMobilePhone())
+                || !user.getMobilePhone().matches("\\d{11}")
+                || isEmpty(user.getPassword())
+                || isEmpty(user.getEmail())
+                || !user.getEmail().contains("@")) {
+            throw new SystemException(ErrorCode.Global.PARAM_ERROR);
+        }
+
         UserEntity registeredUser = passportService.register(user);
         return JsonResult.success(registeredUser);
     }

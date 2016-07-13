@@ -9,6 +9,6 @@ public class SystemException extends RuntimeException {
 
     public SystemException(int errorCode) {
 
-        super(ErrorCode.errorMap.get(errorCode));
+        super(errorCode + "|" + ErrorCode.errorMap.get(errorCode));
     }
 }
