@@ -1,13 +1,12 @@
 package wang.ronnie.db.repository;
 
-import org.springframework.http.ResponseEntity;
+import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
-import org.testng.annotations.Test;
 import wang.ronnie.db.entity.MyLifeEventEntity;
 
 import java.util.Date;
 
-import static org.testng.Assert.*;
+import static org.junit.Assert.*;
 
 /**
  * Created by ronnie on 2016/4/22.

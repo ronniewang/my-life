@@ -18,9 +18,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
-import org.springframework.data.solr.core.SolrTemplate;
-import org.springframework.data.solr.repository.config.EnableSolrRepositories;
-import org.springframework.data.solr.server.support.HttpSolrServerFactoryBean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
@@ -34,7 +31,6 @@ import java.util.Properties;
  */
 @SpringBootApplication
 @Import(value = {PersistenceConfig.class, WebSocketConfig.class, RestConfiguration.class})
-@EnableSolrRepositories("wang.ronnie.solr.repository")
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class MyLifeApplication extends SpringBootServletInitializer {
 
@@ -49,22 +45,6 @@ public class MyLifeApplication extends SpringBootServletInitializer {
 //
 //        return factory;
 //    }
-
-    @Bean
-    public HttpSolrServerFactoryBean solrServerFactoryBean() {
-
-        HttpSolrServerFactoryBean factory = new HttpSolrServerFactoryBean();
-
-        factory.setUrl(environment.getRequiredProperty("solr.server.url"));
-
-        return factory;
-    }
-
-    @Bean
-    public SolrTemplate solrTemplate() throws Exception {
-
-        return new SolrTemplate(solrServerFactoryBean().getObject());
-    }
 
     @Bean
     public static JavaMailSender javaMailSender() {
@@ -111,9 +91,9 @@ public class MyLifeApplication extends SpringBootServletInitializer {
 
         Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
         connector.setScheme("http");
-        connector.setPort(80);
+        connector.setPort(8081);
         connector.setSecure(false);
-        connector.setRedirectPort(443);
+        connector.setRedirectPort(8443);
 
         return connector;
     }
