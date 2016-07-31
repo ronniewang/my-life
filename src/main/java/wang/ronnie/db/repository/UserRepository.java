@@ -7,4 +7,7 @@ import wang.ronnie.db.entity.UserEntity;
 @RepositoryRestResource(collectionResourceRel = "users", path = "users")
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
+    UserEntity findByEmail(String email);
+
+    UserEntity findByMobilePhone(String mobilePhone);
 }

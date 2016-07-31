@@ -4,15 +4,14 @@ import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import wang.ronnie.config.PersistenceConfig;
-import wang.ronnie.config.RestConfiguration;
-import wang.ronnie.config.WebSocketConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -20,11 +19,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import wang.ronnie.config.PersistenceConfig;
+import wang.ronnie.config.RestConfiguration;
+import wang.ronnie.config.WebSocketConfig;
+import wang.ronnie.filter.PassportFilter;
 
+import javax.servlet.Filter;
 import java.util.Properties;
-//import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
  * @author ronnie
@@ -37,14 +38,8 @@ public class MyLifeApplication extends SpringBootServletInitializer {
     @Autowired
     private Environment environment;
 
-//    @Bean
-//    public EmbeddedSolrServerFactoryBean solrServerFactoryBean() {
-//        EmbeddedSolrServerFactoryBean factory = new EmbeddedSolrServerFactoryBean();
-//
-//        factory.setSolrHome(environment.getRequiredProperty("solr.solr.home"));
-//
-//        return factory;
-//    }
+    @Autowired
+    private AutowireCapableBeanFactory beanFactory;
 
     @Bean
     public static JavaMailSender javaMailSender() {
@@ -59,6 +54,18 @@ public class MyLifeApplication extends SpringBootServletInitializer {
         javaMailProperties.put("mail.smtp.starttls.enable", true);
         javaMailSender.setJavaMailProperties(javaMailProperties);
         return javaMailSender;
+    }
+
+    @Bean
+    public FilterRegistrationBean passportFilter() {
+
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        Filter passportFilter = new PassportFilter();
+        beanFactory.autowireBean(passportFilter);
+        registration.setFilter(passportFilter);
+        registration.setOrder(1);
+        registration.addUrlPatterns("/login");
+        return registration;
     }
 
     @Override
