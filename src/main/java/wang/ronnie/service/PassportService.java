@@ -59,6 +59,6 @@ public class PassportService {
                 return true;
             }
         }
-        throw new SystemException(ErrorCode.Login.TOKEN_INVALID);
+        return false;
     }
 }

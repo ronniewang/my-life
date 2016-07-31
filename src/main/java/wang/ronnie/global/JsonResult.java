@@ -21,9 +21,9 @@ public class JsonResult {
         this.errorMessage = errorMessage;
     }
 
-    public static JsonResult error(int errorCode, String errorMessage) {
+    public static JsonResult error(int errorCode) {
 
-        return new JsonResult(null, errorCode, errorMessage);
+        return new JsonResult(null, errorCode, ErrorCode.getErrorMessage(errorCode));
     }
 
     public JsonResult(String errorMessage) {

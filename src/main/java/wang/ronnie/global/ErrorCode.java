@@ -20,6 +20,11 @@ public class ErrorCode {
         errorMap.put(Login.TOKEN_INVALID, "无效的token");
     }
 
+    public static String getErrorMessage(Integer errorCode) {
+
+        return errorMap.get(errorCode);
+    }
+
     public class Register {
 
         public static final int USER_HAS_REGISTERED = 20001;
