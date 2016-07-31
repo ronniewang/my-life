@@ -32,6 +32,7 @@ public class PassportService {
             throw new SystemException(ErrorCode.Login.USER_DOSENT_EXIST);
         }
         if (Md5Crypt.md5Crypt(password.getBytes()).equals(user.getPassword())) {
+            // TODO: 16/7/31 替换成aes加密
             String token = Md5Crypt.md5Crypt((loginName + password + (System.currentTimeMillis() + "")).getBytes());
             TokenHolder.put(user.getId(), new Token(token, System.currentTimeMillis()));
             JSONObject result = new JSONObject();
@@ -47,5 +48,17 @@ public class PassportService {
             return userRepository.save(user);
         }
         throw new SystemException(ErrorCode.Register.USER_HAS_REGISTERED);
+    }
+
+    public boolean checkToken(Long uid, String tokenStr) {
+
+        Token token = TokenHolder.get(uid);
+        if (token != null) {
+            if (token.isValidate(tokenStr)) {
+                token.setTimestamp(System.currentTimeMillis());
+                return true;
+            }
+        }
+        throw new SystemException(ErrorCode.Login.TOKEN_INVALID);
     }
 }

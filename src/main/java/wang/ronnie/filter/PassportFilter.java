@@ -1,6 +1,9 @@
 package wang.ronnie.filter;
 
+import wang.ronnie.global.FilterUriHolder;
+
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
@@ -16,8 +19,15 @@ public class PassportFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
-        String username = servletRequest.getParameter("username");
-        String password = servletRequest.getParameter("password");
+        String uri = ((HttpServletRequest) servletRequest).getRequestURI();
+        if (uri.equals("login")) {
+            String username = servletRequest.getParameter("username");
+            String password = servletRequest.getParameter("password");
+        } else if (FilterUriHolder.needToken(uri)) {
+
+        } else {
+        }
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override
