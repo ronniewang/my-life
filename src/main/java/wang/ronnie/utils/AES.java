@@ -1,10 +1,9 @@
 package wang.ronnie.utils;
 
-import javax.crypto.*;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 public class AES {
@@ -34,17 +33,7 @@ public class AES {
             }
             System.out.println();
             return parseByte2HexStr(result);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -54,27 +43,19 @@ public class AES {
 
         String password = TOKEN_KEY;
         try {
-            KeyGenerator kgen = KeyGenerator.getInstance("AES");
+            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
 
             SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
             secureRandom.setSeed(password.getBytes());
-            kgen.init(128, secureRandom);
-            SecretKey secretKey = kgen.generateKey();
+            keyGenerator.init(128, secureRandom);
+            SecretKey secretKey = keyGenerator.generateKey();
             byte[] enCodeFormat = secretKey.getEncoded();
             SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
             Cipher cipher = Cipher.getInstance("AES");// 创建密码器
             cipher.init(Cipher.DECRYPT_MODE, key);// 初始化
             byte[] result = cipher.doFinal(parseHexStr2Byte(content));
             return new String(result);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -120,19 +101,8 @@ public class AES {
     }
 
     public static void main(String[] args) {
-//		String enT = encrypt("ffdsaf", "ffdasfas");
-//		byte[] result = parseHexStr2Byte(enT);
-//		for (byte b : result) {
-//			System.out.print(b);
-//			System.out.print(" ");
-//		}
-//		System.out.println();
-//		System.out.println(enT);
-//		System.out.println(decrypt(enT, "ffdasfas"));
+
         System.out.println(encrypt("4131,1428395137,108000"));
-        long start = System.currentTimeMillis();
         System.out.println(decrypt("6B240EF19462B09F6B49EE4B0BCD17B8ED5CE87F81695D0F803ED5741EEA08FF"));
-        long end = System.currentTimeMillis();
-        System.out.println(end - start);
     }
 }
