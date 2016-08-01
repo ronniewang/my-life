@@ -1,6 +1,5 @@
 package wang.ronnie.service;
 
-import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.codec.digest.Md5Crypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +9,7 @@ import wang.ronnie.exception.SystemException;
 import wang.ronnie.global.ErrorCode;
 import wang.ronnie.global.TokenHolder;
 import wang.ronnie.model.Token;
+import wang.ronnie.utils.AES;
 
 /**
  * Created by ronniewang on 16/7/12.
@@ -17,10 +17,12 @@ import wang.ronnie.model.Token;
 @Service
 public class PassportService {
 
+    private static final String SALT = "ronnieBornIn1975!@#$";
+
     @Autowired
     private UserRepository userRepository;
 
-    public JSONObject login(String loginName, String password) {
+    public void login(String loginName, String password) {
 
         UserEntity user;
         if (loginName.contains("@")) {
@@ -31,12 +33,10 @@ public class PassportService {
         if (user == null) {
             throw new SystemException(ErrorCode.Login.USER_DOSENT_EXIST);
         }
-        if (Md5Crypt.md5Crypt(password.getBytes()).equals(user.getPassword())) {
-            // TODO: 16/7/31 替换成aes加密
-            String token = Md5Crypt.md5Crypt((loginName + password + (System.currentTimeMillis() + "")).getBytes());
-            TokenHolder.put(token, user);
-            JSONObject result = new JSONObject();
-            return result;
+        if (Md5Crypt.md5Crypt((password + SALT).getBytes()).equals(user.getPassword())) {
+            String token = AES.encrypt(user.getId() + "|" + password + "|" + (System.currentTimeMillis() + ""));
+            TokenHolder.put(user.getId(), token);
+            return;
         }
         throw new SystemException(ErrorCode.Login.PASSWORD_DOSENT_MATCH);
     }
@@ -44,7 +44,7 @@ public class PassportService {
     public UserEntity register(UserEntity user) {
 
         if (userRepository.findByMobilePhone(user.getMobilePhone()) == null) {
-            user.setPassword(Md5Crypt.md5Crypt(user.getPassword().getBytes()));
+            user.setPassword(Md5Crypt.md5Crypt((user.getPassword() + SALT).getBytes()));
             return userRepository.save(user);
         }
         throw new SystemException(ErrorCode.Register.USER_HAS_REGISTERED);

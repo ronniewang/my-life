@@ -19,7 +19,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import wang.ronnie.aspect.LogAspect;
 import wang.ronnie.config.PersistenceConfig;
 import wang.ronnie.config.RestConfiguration;
 import wang.ronnie.config.WebSocketConfig;
@@ -33,7 +32,7 @@ import java.util.Properties;
  * @author ronnie
  */
 @SpringBootApplication
-@Import(value = {PersistenceConfig.class, WebSocketConfig.class, RestConfiguration.class, LogAspect.class})
+@Import(value = {PersistenceConfig.class, WebSocketConfig.class, RestConfiguration.class/*, LogAspect.class*/})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class MyLifeApplication extends SpringBootServletInitializer {
 

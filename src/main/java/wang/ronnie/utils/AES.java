@@ -11,15 +11,9 @@ public class AES {
 
     private final static String TOKEN_KEY = "24faser89213jk4lfsdfjaerds4@()umZ";
 
-    /**
-     * 加密
-     *
-     * @param content  需要加密的内容
-     * @param password 加密密码
-     * @return
-     */
-    public static String encrypt(String content, String password) {
+    public static String encrypt(String content) {
 
+        String password = TOKEN_KEY;
         try {
             KeyGenerator kgen = KeyGenerator.getInstance("AES");
 
@@ -56,15 +50,9 @@ public class AES {
         return null;
     }
 
-    /**
-     * 解密
-     *
-     * @param content  待解密内容
-     * @param password 解密密钥
-     * @return
-     */
-    public static String decrypt(String content, String password) {
+    public static String decrypt(String content) {
 
+        String password = TOKEN_KEY;
         try {
             KeyGenerator kgen = KeyGenerator.getInstance("AES");
 
@@ -141,7 +129,10 @@ public class AES {
 //		System.out.println();
 //		System.out.println(enT);
 //		System.out.println(decrypt(enT, "ffdasfas"));
-        System.out.println(encrypt("4131,1428395137,108000", TOKEN_KEY));
-        System.out.println(decrypt("B0612B765520C16400E641383A996804D603A20EFCADA540ADF25B9A1BAB3CBD", TOKEN_KEY));
+        System.out.println(encrypt("4131,1428395137,108000"));
+        long start = System.currentTimeMillis();
+        System.out.println(decrypt("6B240EF19462B09F6B49EE4B0BCD17B8ED5CE87F81695D0F803ED5741EEA08FF"));
+        long end = System.currentTimeMillis();
+        System.out.println(end - start);
     }
 }

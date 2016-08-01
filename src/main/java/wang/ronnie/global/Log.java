@@ -1,7 +1,6 @@
 package wang.ronnie.global;
 
 import org.apache.commons.logging.LogFactory;
-import wang.ronnie.aspect.LogAspect;
 import wang.ronnie.utils.DateUtil;
 
 
@@ -31,7 +30,8 @@ public class Log {
 
 
 //		request id
-        sb.append("[requestId: ").append(LogAspect.getCurrentRequestId()).append("]");
+//        sb.append("[requestId: ").append(LogAspect.getCurrentRequestId()).append("]");
+// TODO: 16/8/1 request id
 
         return sb.toString();
     }

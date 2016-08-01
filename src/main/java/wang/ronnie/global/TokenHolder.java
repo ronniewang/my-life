@@ -11,16 +11,16 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class TokenHolder {
 
-    private static ConcurrentMap<Token, UserEntity> tokenMap = new ConcurrentHashMap<>();
+    private static ConcurrentMap<Long, Token> tokenMap = new ConcurrentHashMap<>();
 
-    public static UserEntity get(Token uid) {
+    public static Token get(Long uid) {
 
         return tokenMap.get(uid);
     }
 
-    public static void put(String token, UserEntity userEntity) {
+    public static void put(Long uid, String token) {
 
-        tokenMap.put(new Token(token, System.currentTimeMillis()), userEntity);
+        tokenMap.put(uid, new Token(token, System.currentTimeMillis()));
     }
 
     public static UserEntity check(String token) {
