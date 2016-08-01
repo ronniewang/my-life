@@ -1,5 +1,6 @@
 package wang.ronnie.global;
 
+import wang.ronnie.db.entity.UserEntity;
 import wang.ronnie.model.Token;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,15 +11,20 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class TokenHolder {
 
-    private static ConcurrentMap<Long, Token> tokenMap = new ConcurrentHashMap<>();
+    private static ConcurrentMap<Token, UserEntity> tokenMap = new ConcurrentHashMap<>();
 
-    public static Token get(Long uid) {
+    public static UserEntity get(Token uid) {
 
         return tokenMap.get(uid);
     }
 
-    public static void put(Long uid, Token token) {
+    public static void put(String token, UserEntity userEntity) {
 
-        tokenMap.put(uid, token);
+        tokenMap.put(new Token(token, System.currentTimeMillis()), userEntity);
+    }
+
+    public static UserEntity check(String token) {
+
+        return null;
     }
 }

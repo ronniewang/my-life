@@ -33,7 +33,7 @@ public class PassportService {
         }
         if (Md5Crypt.md5Crypt(password.getBytes()).equals(user.getPassword())) {
             String token = Md5Crypt.md5Crypt((loginName + password + (System.currentTimeMillis() + "")).getBytes());
-            TokenHolder.put(user.getId(), new Token(token, System.currentTimeMillis()));
+            TokenHolder.put(token, user);
             JSONObject result = new JSONObject();
             return result;
         }

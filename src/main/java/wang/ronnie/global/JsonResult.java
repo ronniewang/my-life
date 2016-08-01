@@ -11,7 +11,7 @@ public class JsonResult {
 
     public static JsonResult success(Object object) {
 
-        return new JsonResult(object,0,"");
+        return new JsonResult(object, 0, "");
     }
 
     public JsonResult(Object result, int errorCode, String errorMessage) {
