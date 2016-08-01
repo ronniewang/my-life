@@ -19,10 +19,12 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import wang.ronnie.aspect.LogAspect;
 import wang.ronnie.config.PersistenceConfig;
 import wang.ronnie.config.RestConfiguration;
 import wang.ronnie.config.WebSocketConfig;
 import wang.ronnie.filter.PassportFilter;
+import wang.ronnie.service.PassportService;
 
 import javax.servlet.Filter;
 import java.util.Properties;
@@ -31,12 +33,15 @@ import java.util.Properties;
  * @author ronnie
  */
 @SpringBootApplication
-@Import(value = {PersistenceConfig.class, WebSocketConfig.class, RestConfiguration.class})
+@Import(value = {PersistenceConfig.class, WebSocketConfig.class, RestConfiguration.class, LogAspect.class})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class MyLifeApplication extends SpringBootServletInitializer {
 
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private PassportService passportService;
 
     @Autowired
     private AutowireCapableBeanFactory beanFactory;
@@ -60,11 +65,11 @@ public class MyLifeApplication extends SpringBootServletInitializer {
     public FilterRegistrationBean passportFilter() {
 
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        Filter passportFilter = new PassportFilter();
+        Filter passportFilter = new PassportFilter(passportService);
         beanFactory.autowireBean(passportFilter);
         registration.setFilter(passportFilter);
         registration.setOrder(1);
-        registration.addUrlPatterns("/login");
+        registration.addUrlPatterns("/*");
         return registration;
     }
 

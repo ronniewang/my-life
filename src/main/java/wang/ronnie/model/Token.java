@@ -1,5 +1,10 @@
 package wang.ronnie.model;
 
+import wang.ronnie.exception.SystemException;
+import wang.ronnie.global.ErrorCode;
+
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by ronniewang on 16/7/12.
  */
@@ -35,24 +40,12 @@ public class Token {
         this.value = value;
     }
 
-    @Override
-    public boolean equals(Object o) {
+    public boolean isValidate(String tokenStr) {
 
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Token token = (Token) o;
-
-        if (timestamp != token.timestamp) return false;
-        return value != null ? value.equals(token.value) : token.value == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-
-        int result = value != null ? value.hashCode() : 0;
-        result = 31 * result + (int) (timestamp ^ (timestamp >>> 32));
-        return result;
+        if (tokenStr.equals(this.value)
+                && timestamp + TimeUnit.MINUTES.toMillis(30) > System.currentTimeMillis()) {
+            return true;
+        }
+        throw new SystemException(ErrorCode.Login.TOKEN_INVALID);
     }
 }
