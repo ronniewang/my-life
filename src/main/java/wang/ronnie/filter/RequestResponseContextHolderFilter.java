@@ -18,16 +18,13 @@ public class RequestResponseContextHolderFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest req = (HttpServletRequest) request;
-
         Map param = req.getParameterMap();
         StringBuilder sb = new StringBuilder();
         sb.append(req.getRequestURI()).append("(");
-        for (Object key : param.keySet()) {
+        for (Object key : param.keySet())
             sb.append(key).append(":").append(req.getParameter(key + "")).append("|");
-        }
         sb.append(")");
         Log.info(sb.toString());
-
         chain.doFilter(request, response);
     }
 
@@ -35,5 +32,4 @@ public class RequestResponseContextHolderFilter implements Filter {
     public void destroy() {
 
     }
-
 }
