@@ -1,6 +1,5 @@
 package wang.ronnie.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +8,6 @@ import wang.ronnie.db.entity.UserEntity;
 import wang.ronnie.exception.SystemException;
 import wang.ronnie.global.ErrorCode;
 import wang.ronnie.global.JsonResult;
-import wang.ronnie.global.Log;
 import wang.ronnie.service.PassportService;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -32,9 +30,8 @@ public class PassportController {
             throw new SystemException(ErrorCode.Global.PARAM_ERROR);
         }
 
-        Log.info("[loginName:" + loginName + "|password:" + password + "]");
-        JSONObject result = passportService.login(loginName, password);
-        return JsonResult.success(result);
+        passportService.login(loginName, password);
+        return JsonResult.success("success");
     }
 
     @RequestMapping("/register")

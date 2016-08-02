@@ -1,5 +1,7 @@
 package wang.ronnie.utils;
 
+import wang.ronnie.global.Constants;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -8,19 +10,17 @@ import java.security.SecureRandom;
 
 public class AES {
 
-    private final static String TOKEN_KEY = "24faser89213jk4lfsdfjaerds4@()umZ";
-
     public static String encrypt(String content) {
 
-        String password = TOKEN_KEY;
+        String password = Constants.TOKEN_KEY;
         try {
-            KeyGenerator kgen = KeyGenerator.getInstance("AES");
+            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
 
             SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
             secureRandom.setSeed(password.getBytes());
 
-            kgen.init(128, secureRandom);
-            SecretKey secretKey = kgen.generateKey();
+            keyGenerator.init(128, secureRandom);
+            SecretKey secretKey = keyGenerator.generateKey();
             byte[] enCodeFormat = secretKey.getEncoded();
             SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
             Cipher cipher = Cipher.getInstance("AES");// 创建密码器
@@ -41,7 +41,7 @@ public class AES {
 
     public static String decrypt(String content) {
 
-        String password = TOKEN_KEY;
+        String password = Constants.TOKEN_KEY;
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
 
@@ -100,9 +100,4 @@ public class AES {
         return result;
     }
 
-    public static void main(String[] args) {
-
-        System.out.println(encrypt("4131,1428395137,108000"));
-        System.out.println(decrypt("6B240EF19462B09F6B49EE4B0BCD17B8ED5CE87F81695D0F803ED5741EEA08FF"));
-    }
 }

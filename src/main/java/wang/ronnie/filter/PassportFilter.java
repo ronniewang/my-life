@@ -41,7 +41,6 @@ public class PassportFilter implements Filter {
             Long uid = TokenUtils.getUid(token);
             if (!passportService.checkToken(uid, token)) {
                 request.getRequestDispatcher("/dealError?errorCode=" + ErrorCode.Login.TOKEN_INVALID).forward(servletRequest, servletResponse);
-
                 return;
             }
         } else {
