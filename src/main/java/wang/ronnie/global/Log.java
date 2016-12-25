@@ -67,8 +67,4 @@ public class Log {
         log.warn(sb.toString());
     }
 
-    public static void main(String[] args) {
-
-        Log.fatal("test");
-    }
 }

@@ -380,7 +380,4 @@ public class RedisUtil {
         return null;
     }
 
-    public static void main(String[] args) {
-
-    }
 }

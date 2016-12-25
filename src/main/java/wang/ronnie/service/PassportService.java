@@ -61,8 +61,4 @@ public class PassportService {
         return false;
     }
 
-    public static void main(String[] args) {
-
-        System.out.println(Md5Crypt.md5Crypt("123".getBytes(), "$1$o5BHZ.rE"));
-    }
 }
