@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Aspect
 @Configuration
-public class LogAspect {
+public class LoggerAspect {
 
     public static AtomicLong requestId = new AtomicLong(System.currentTimeMillis());
 
@@ -57,7 +57,7 @@ public class LogAspect {
         }
     }
 
-    @Around(value = "searchDatePointcut(startDate,endDate)", argNames = "startDate,endDate")
+    @Around(value = "searchDatePointcut(startDate,endDate)", argNames = "startDate, endDate")
     public Object dealSearchDate(ProceedingJoinPoint joinpoint, Date startDate, Date endDate) throws Throwable {
 
         Object[] args = joinpoint.getArgs();
