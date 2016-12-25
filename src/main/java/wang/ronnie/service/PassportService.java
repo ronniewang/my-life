@@ -30,14 +30,14 @@ public class PassportService {
             user = userRepository.findByMobilePhone(loginName);
         }
         if (user == null) {
-            throw new SystemException(ErrorCode.Login.USER_DOSENT_EXIST);
+            throw new SystemException(ErrorCode.Login.USER_DOSE_NOT_EXIST);
         }
         if (Md5Crypt.md5Crypt(password.getBytes(), Constants.SALT).equals(user.getPassword())) {
             String token = AES.encrypt(user.getId() + "|" + password + "|" + (System.currentTimeMillis() + ""));
             TokenHolder.put(user.getId(), token);
             return;
         }
-        throw new SystemException(ErrorCode.Login.PASSWORD_DOSENT_MATCH);
+        throw new SystemException(ErrorCode.Login.PASSWORD_DOSE_NOT_MATCH);
     }
 
     public UserEntity register(UserEntity user) {
