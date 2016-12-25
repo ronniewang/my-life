@@ -13,6 +13,7 @@ public class AES {
     public static String encrypt(String content) {
 
         String password = Constants.TOKEN_KEY;
+
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
 
