@@ -31,21 +31,21 @@ public class PassportFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
-        String uri = request.getRequestURI();
-        if (uri.equals("login")) {
-            String username = servletRequest.getParameter("username");
-            String password = servletRequest.getParameter("password");
-        } else if (FilterUriHolder.needToken(uri)) {
-            String token = getToken(request);
-            Long uid = TokenUtils.getUid(token);
-            if (!passportService.checkToken(uid, token)) {
-                request.getRequestDispatcher("/dealError?errorCode=" + ErrorCode.Login.TOKEN_INVALID).forward(servletRequest, servletResponse);
-                return;
-            }
-        } else {
+//        HttpServletRequest request = (HttpServletRequest) servletRequest;
+//        String uri = request.getRequestURI();
+//        if (uri.equals("login")) {
+//            String username = servletRequest.getParameter("username");
+//            String password = servletRequest.getParameter("password");
+//        } else if (FilterUriHolder.needToken(uri)) {
+//            String token = getToken(request);
+//            Long uid = TokenUtils.getUid(token);
+//            if (!passportService.checkToken(uid, token)) {
+//                request.getRequestDispatcher("/dealError?errorCode=" + ErrorCode.Login.TOKEN_INVALID).forward(servletRequest, servletResponse);
+//                return;
+//            }
+//        } else {
             //do nothing
-        }
+//        }
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

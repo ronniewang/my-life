@@ -88,13 +88,14 @@ public class MyLifeApplication extends SpringBootServletInitializer {
                 SecurityConstraint securityConstraint = new SecurityConstraint();
                 securityConstraint.setUserConstraint("CONFIDENTIAL");
                 SecurityCollection collection = new SecurityCollection();
-                collection.addPattern("/*");
+                collection.addPattern("/jfiekskadlfc");
+//                collection.addPattern("/*");
                 securityConstraint.addCollection(collection);
                 context.addConstraint(securityConstraint);
             }
         };
 
-        tomcat.addAdditionalTomcatConnectors(initiateHttpConnector());
+//        tomcat.addAdditionalTomcatConnectors(initiateHttpConnector());
         return tomcat;
     }
 
@@ -102,13 +103,12 @@ public class MyLifeApplication extends SpringBootServletInitializer {
 
         Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
         connector.setScheme("http");
-        connector.setPort(8081);
-        connector.setSecure(false);
-        connector.setRedirectPort(8443);
+//        connector.setPort(8082);
+//        connector.setSecure(false);
+//        connector.setRedirectPort(8443);
 
         return connector;
     }
-
 
 //    @Configuration
 //    @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)

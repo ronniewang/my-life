@@ -34,6 +34,12 @@ public class HomeController {
         return "index";
     }
 
+    @RequestMapping("/copy")
+    public String copy() {
+
+        return "copy";
+    }
+
     @RequestMapping("/timeLine")
     public String timeLine() {
 
