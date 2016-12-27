@@ -34,7 +34,7 @@ import java.util.Properties;
 @SpringBootApplication
 @Import(value = {PersistenceConfig.class, WebSocketConfig.class, RestConfiguration.class/*, LogAspect.class*/})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-public class MyLifeApplication extends SpringBootServletInitializer {
+public class Application extends SpringBootServletInitializer {
 
     @Autowired
     private Environment environment;
@@ -75,7 +75,7 @@ public class MyLifeApplication extends SpringBootServletInitializer {
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 
-        return application.sources(MyLifeApplication.class);
+        return application.sources(Application.class);
     }
 
     @Bean
@@ -143,6 +143,6 @@ public class MyLifeApplication extends SpringBootServletInitializer {
 //        simpleMailMessage.setText("learn");
 //        javaMailSender().send(simpleMailMessage);
 
-        SpringApplication.run(MyLifeApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 }
