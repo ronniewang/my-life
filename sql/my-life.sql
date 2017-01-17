@@ -13,21 +13,25 @@ File Encoding         : 65001
 Date: 2016-05-04 09:10:28
 */
 
-SET FOREIGN_KEY_CHECKS=0;
+SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
 -- Table structure for t_daily_summary
 -- ----------------------------
 DROP TABLE IF EXISTS `t_daily_summary`;
 CREATE TABLE `t_daily_summary` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `summary` longtext NOT NULL,
-  `created_time` datetime DEFAULT NULL,
-  `last_modified_time` datetime DEFAULT NULL,
-  `created_by` bigint(20) DEFAULT NULL,
-  `last_modified_by` bigint(20) DEFAULT NULL,
+  `id`                 BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `summary`            LONGTEXT   NOT NULL,
+  `created_time`       DATETIME            DEFAULT NULL,
+  `name`               CHAR(255)           DEFAULT NULL,
+  `read_times`         INT                 DEFAULT 0,
+  `last_modified_time` DATETIME            DEFAULT NULL,
+  `created_by`         BIGINT(20)          DEFAULT NULL,
+  `last_modified_by`   BIGINT(20)          DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 -- ----------------------------
 -- Records of t_daily_summary
@@ -38,15 +42,17 @@ CREATE TABLE `t_daily_summary` (
 -- ----------------------------
 DROP TABLE IF EXISTS `t_event_tag`;
 CREATE TABLE `t_event_tag` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) NOT NULL,
-  `tag` varchar(0) NOT NULL,
-  `created_time` datetime DEFAULT NULL,
-  `last_modified_time` datetime DEFAULT NULL,
-  `created_by` bigint(20) DEFAULT NULL,
-  `last_modified_by` bigint(20) DEFAULT NULL,
+  `id`                 BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `user_id`            BIGINT(20) NOT NULL,
+  `tag`                VARCHAR(0) NOT NULL,
+  `created_time`       DATETIME            DEFAULT NULL,
+  `last_modified_time` DATETIME            DEFAULT NULL,
+  `created_by`         BIGINT(20)          DEFAULT NULL,
+  `last_modified_by`   BIGINT(20)          DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 -- ----------------------------
 -- Records of t_event_tag
@@ -57,13 +63,15 @@ CREATE TABLE `t_event_tag` (
 -- ----------------------------
 DROP TABLE IF EXISTS `t_event_type`;
 CREATE TABLE `t_event_type` (
-  `type_id` int(11) NOT NULL,
-  `type_description` varchar(255) NOT NULL,
-  `parent_type_id` int(11) DEFAULT NULL,
-  `has_children` bit(1) NOT NULL,
-  `color` varchar(255) DEFAULT NULL,
+  `type_id`          INT(11)      NOT NULL,
+  `type_description` VARCHAR(255) NOT NULL,
+  `parent_type_id`   INT(11)      DEFAULT NULL,
+  `has_children`     BIT(1)       NOT NULL,
+  `color`            VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (`type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 -- ----------------------------
 -- Records of t_event_type
@@ -83,34 +91,57 @@ INSERT INTO `t_event_type` VALUES ('9', '运动', '0', '', '#B3EE3A');
 -- ----------------------------
 DROP TABLE IF EXISTS `t_my_life_event`;
 CREATE TABLE `t_my_life_event` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `event_start_time` datetime NOT NULL,
-  `event_end_time` datetime NOT NULL,
-  `event_description` longtext NOT NULL,
-  `event_resources` longtext,
-  `event_type` int(11) NOT NULL,
-  `event_duration` int(11) DEFAULT NULL,
-  `event_tags` varchar(255) DEFAULT NULL,
-  `created_by` bigint(20) NOT NULL,
-  `last_modified_by` bigint(20) NOT NULL,
-  `created_time` datetime NOT NULL,
-  `last_modified_time` datetime NOT NULL,
+  `id`                 BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `event_start_time`   DATETIME   NOT NULL,
+  `event_end_time`     DATETIME   NOT NULL,
+  `event_description`  LONGTEXT   NOT NULL,
+  `event_resources`    LONGTEXT,
+  `event_type`         INT(11)    NOT NULL,
+  `event_duration`     INT(11)             DEFAULT NULL,
+  `event_tags`         VARCHAR(255)        DEFAULT NULL,
+  `created_by`         BIGINT(20) NOT NULL,
+  `last_modified_by`   BIGINT(20) NOT NULL,
+  `created_time`       DATETIME   NOT NULL,
+  `last_modified_time` DATETIME   NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 62
+  DEFAULT CHARSET = utf8;
 
 -- ----------------------------
 -- Table structure for t_user
 -- ----------------------------
 DROP TABLE IF EXISTS `t_user`;
 CREATE TABLE `t_user` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) DEFAULT NULL,
-  `mobile_phone` varchar(255) DEFAULT NULL,
-  `password` varchar(255) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `is_email_valid` bit(1) DEFAULT NULL,
-  `is_mobile_phone_valid` bit(1) DEFAULT NULL,
-  `created_time` datetime NOT NULL,
-  `last_modified_time` datetime NOT NULL,
+  `id`                    BIGINT(20)   NOT NULL AUTO_INCREMENT,
+  `email`                 VARCHAR(255)          DEFAULT NULL,
+  `mobile_phone`          VARCHAR(255)          DEFAULT NULL,
+  `password`              VARCHAR(255) NOT NULL,
+  `username`              VARCHAR(255) NOT NULL,
+  `is_email_valid`        BIT(1)                DEFAULT NULL,
+  `is_mobile_phone_valid` BIT(1)                DEFAULT NULL,
+  `created_time`          DATETIME     NOT NULL,
+  `last_modified_time`    DATETIME     NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 2
+  DEFAULT CHARSET = utf8;
+
+-- ----------------------------
+-- Table structure for t_article
+-- ----------------------------
+
+DROP TABLE IF EXISTS `t_article`;
+
+CREATE TABLE `t_article` (
+  `id`                 BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `content`            TEXT       NOT NULL,
+  `created_time`       DATETIME   NOT NULL,
+  `last_modified_time` DATETIME   NOT NULL,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 2
+  DEFAULT CHARSET = utf8;
